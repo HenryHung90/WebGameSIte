@@ -1,0 +1,192 @@
+.CenterBox{
+    position: absolute;
+    margin: 0;
+    top: 0;
+    left:0;
+    height:100%;
+    width:100%;
+    background-color: antiquewhite;
+    border-radius: 1px;
+    box-shadow: 0px 0px 0px 8px rgba(0,0,0,0.3); 
+}
+
+/* 組別照片 */
+.ShortCutBox{
+    transition-duration: .5s;
+    z-index: 0;
+    opacity: 0.3;
+    width:200px;
+    height:100%;
+    animation:sildeDown .7s steps(300,end);
+}
+@keyframes sildeDown {
+  0% {
+    opacity: 0;
+    height: 0;
+  }
+  10% {
+    opacity: 0.1;
+    height: 10%;
+  }
+  60% {
+    opacity: 0.2;
+    height: 50%;
+  }
+  90% {
+    opacity: 0.3;
+    height: 90%;
+  }
+  100%{
+      height: 100%;
+  }
+}
+.ShortCutBox:hover{
+    transition-duration: .5s;
+    width:250px;
+    opacity: 1;
+}
+
+#ShortCutBox_01{
+    background-color:red;
+}
+#ShortCutBox_02{
+    background-color: orange;
+}
+#ShortCutBox_03{
+    background-color:yellow;
+}
+#ShortCutBox_04{
+    background-color: green;
+}
+.ShortCutBox_05{
+    background-color:blue;
+}
+#ShortCutBox_06{
+    background-color:pink;
+}
+#ShortCutBox_07{
+    background-color:purple;
+}
+#ShortCutBox_08{
+    background-color:white;
+}
+#ShortCutBox_09{
+    background-color:#494949;
+}
+#ShortCutBox_10{
+    background-color:#949494;
+}
+#ShortCutBox_11{
+    background-color:#111111;
+}
+/* ******** */
+#HomeTitle{
+    user-select: none;
+    z-index: 100;
+    white-space: nowrap;
+    position: absolute;
+    top:50%;
+    left:55%;
+    margin:auto;
+    overflow: hidden;
+    transform: translateY(-50%);
+    transform: translateX(-50%);
+    font-size:6em;
+    width:900px;
+    animation:typing 1s steps(300, end),
+    blink-caret 1s steps(15, end);
+}
+#HomeUser{
+  color:white;
+  text-align:center;
+  margin-top:20px;
+  font-size:50px;
+  opacity: 0;
+}
+@keyframes typing {
+  0% {
+    width: 0;
+  }
+  30%{
+    width:250px;
+  }
+  50%{
+    width:500px;
+  }
+  80%{
+    width: 800px;
+  }
+  100% {
+    width: 900px;
+  }
+}
+@keyframes blink-caret {
+  from,
+  to {
+    box-shadow: 1px 0 0 0 transparent;
+  }
+  50% {
+    box-shadow: 1px 0 0 0;
+  }
+}
+#HomeBackground{
+    display:flex;
+    height:100%;
+    z-index: -100;
+}
+
+
+/***************Group File*****************/
+.HomeGroupFileBox{
+    height:250%;
+}
+.GroupLine{
+    display:flex;
+    padding:50px 150px 0 150px;
+    justify-content: space-between;
+    opacity: 0;
+}
+#Line_4{
+    justify-content: space-around;
+}
+.Group{
+    display: inline;
+}
+.GroupCard{
+    width:297px;
+    height:420px;
+    background-color:lightblue;
+    text-align:center;
+    border-radius:20px 20px 20px 20px;
+}
+.GroupMouse{
+  position:absolute;
+  background-color:rgba(0,0,0,0);
+  width:297px;
+  height:420px;
+}
+.GroupCard_Text{
+    user-select:none;
+    text-align:center;
+    margin-top: -180px;;
+    padding-top:10px;
+    width:297px;
+    height:170px;
+    background-color:wheat;
+    border-radius:20px 20px 20px 20px;
+    display: none;
+}
+.GroupCard_GroupNumber{
+    margin-bottom: -20px;
+}
+.GroupCard_GroupMember{
+    margin-top:-10px;
+    font-size:12px;
+}
+
+#LogoutButton{
+  position:absolute;
+  top:70%;
+  left:45%;
+  transition:translateY(-50%);
+}
