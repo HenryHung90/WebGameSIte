@@ -2,8 +2,8 @@ import "./index.css";
 
 const Error = () => {
   return (
-    <section class="notFound">
-      <div class="img">
+    <section className="notFound">
+      <div className="img">
         <img
           src="https://assets.codepen.io/5647096/backToTheHomepage.png"
           alt="Back to the Homepage"
@@ -13,11 +13,11 @@ const Error = () => {
           alt="El Delorean, El Doc y Marti McFly"
         />
       </div>
-      <div class="text">
+      <div className="text">
         <h1>404</h1>
         <h2>PAGE NOT FOUND</h2>
         <h3>BACK TO HOME?</h3>
-        <a href="/" class="yes">
+        <a href="/" className="yes">
           YES
         </a>
         <a href="https://arcxingye.github.io/rr/a1.html">NO</a>

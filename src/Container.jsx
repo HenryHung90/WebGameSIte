@@ -29,13 +29,14 @@ const Container = () =>{
 
     useEffect(()=>{
         firebase.auth().onAuthStateChanged((user) =>{
-    if(user){
-        let UserTempNode = {
-            UserName:user._delegate.displayName,
-            UserEmail:user._delegate.email,
-        };
-        setUser(UserTempNode);
-        return setIsUser(true)
+            if(user){
+                let UserTempNode = {
+                    UserName:user._delegate.displayName,
+                    UserEmail:user._delegate.email,
+                    UserPhoto:user._delegate.photoURL,
+                };
+            setUser(UserTempNode);
+            return setIsUser(true)
         }
         setIsUser(false)
      })

@@ -12,6 +12,7 @@
 
 /* 組別照片 */
 .ShortCutBox{
+    background-position: center;
     transition-duration: .5s;
     z-index: 0;
     opacity: 0.3;
@@ -46,52 +47,55 @@
     opacity: 1;
 }
 
-#ShortCutBox_01{
-    background-color:red;
+#ShortCutBox_01 ,#GroupCard_01{
+    background-image: url('../components/image/G01.jpeg');
 }
-#ShortCutBox_02{
-    background-color: orange;
+#ShortCutBox_02 ,#GroupCard_02{
+    background-image:url('../components/image/G02.jpeg');
 }
-#ShortCutBox_03{
-    background-color:yellow;
+#ShortCutBox_03 ,#GroupCard_03{
+    background-image:url('../components/image/G03.jpeg');
 }
-#ShortCutBox_04{
-    background-color: green;
+#ShortCutBox_04 ,#GroupCard_04{
+    background-image:url('../components/image/G04.jpeg');
 }
-.ShortCutBox_05{
-    background-color:blue;
+#ShortCutBox_05 ,#GroupCard_05{
+    background-image:url('../components/image/G05.jpeg');
 }
-#ShortCutBox_06{
-    background-color:pink;
+#ShortCutBox_06 ,#GroupCard_06{
+    background-image:url('../components/image/G06.jpeg');
 }
-#ShortCutBox_07{
-    background-color:purple;
+#ShortCutBox_07 ,#GroupCard_07{
+    background-image:url('../components/image/G07.jpeg');
 }
-#ShortCutBox_08{
-    background-color:white;
+#ShortCutBox_08 ,#GroupCard_08{
+    background-image:url('../components/image/G08.jpeg');
 }
-#ShortCutBox_09{
-    background-color:#494949;
+#ShortCutBox_09 ,#GroupCard_09{
+    background-image:url('../components/image/G09.jpeg');
 }
-#ShortCutBox_10{
-    background-color:#949494;
+#ShortCutBox_10 ,#GroupCard_10{
+    background-image:url('../components/image/G10.jpeg');
 }
-#ShortCutBox_11{
-    background-color:#111111;
+#ShortCutBox_11 ,#GroupCard_11{
+    background-image:url('../components/image/G11.jpeg');
 }
 /* ******** */
 #HomeTitle{
+    font-family: 'pixel font';
     user-select: none;
+    -webkit-text-stroke: 1px rgb(79, 84, 126);
+    color: white;
     z-index: 100;
     white-space: nowrap;
     position: absolute;
     top:50%;
-    left:55%;
+    left:50%;
     margin:auto;
     overflow: hidden;
     transform: translateY(-50%);
     transform: translateX(-50%);
-    font-size:6em;
+    font-size:7em;
     width:900px;
     animation:typing 1s steps(300, end),
     blink-caret 1s steps(15, end);
@@ -99,7 +103,7 @@
 #HomeUser{
   color:white;
   text-align:center;
-  margin-top:20px;
+  margin-top:70px;
   font-size:50px;
   opacity: 0;
 }
@@ -153,6 +157,8 @@
     display: inline;
 }
 .GroupCard{
+    background-position: center;
+    background-size: cover;
     width:297px;
     height:420px;
     background-color:lightblue;
@@ -160,19 +166,22 @@
     border-radius:20px 20px 20px 20px;
 }
 .GroupMouse{
+  z-index: 100;
   position:absolute;
   background-color:rgba(0,0,0,0);
   width:297px;
   height:420px;
 }
 .GroupCard_Text{
+    z-index: 99;
     user-select:none;
     text-align:center;
     margin-top: -180px;;
     padding-top:10px;
     width:297px;
     height:170px;
-    background-color:wheat;
+    background-color:white;
+    opacity: 0.7;
     border-radius:20px 20px 20px 20px;
     display: none;
 }
