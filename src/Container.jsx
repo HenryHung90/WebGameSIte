@@ -21,6 +21,8 @@ import G08 from './pages/G08'
 import G09 from './pages/G09'
 import G10 from './pages/G10'
 import G11 from './pages/G11'
+import Scoring from './pages/Scoring'
+import Photograph from './pages/Photograph'
 
 const Container = () =>{
     
@@ -50,17 +52,19 @@ const Container = () =>{
                 <Routes>
                     <Route path='/' element={<Home User={User}/>}/>
                     <Route path='/Home' element={<Home User={User}/>}/>
-                    <Route path='/G01' element={<G01/>}/>
-                    <Route path='/G02' element={<G02/>}/>
-                    <Route path='/G03' element={<G03/>}/>
-                    <Route path='/G04' element={<G04/>}/>
-                    <Route path='/G05' element={<G05/>}/>
-                    <Route path='/G06' element={<G06/>}/>
-                    <Route path='/G07' element={<G07/>}/>
-                    <Route path='/G08' element={<G08/>}/>
-                    <Route path='/G09' element={<G09/>}/>
-                    <Route path='/G10' element={<G10/>}/>
-                    <Route path='/G11' element={<G11/>}/>
+                    <Route path='/G01' element={<G01 User={User}/>}/>
+                    <Route path='/G02' element={<G02 User={User}/>}/>
+                    <Route path='/G03' element={<G03 User={User}/>}/>
+                    <Route path='/G04' element={<G04 User={User}/>}/>
+                    <Route path='/G05' element={<G05 User={User}/>}/>
+                    <Route path='/G06' element={<G06 User={User}/>}/>
+                    <Route path='/G07' element={<G07 User={User}/>}/>
+                    <Route path='/G08' element={<G08 User={User}/>}/>
+                    <Route path='/G09' element={<G09 User={User}/>}/>
+                    <Route path='/G10' element={<G10 User={User}/>}/>
+                    <Route path='/G11' element={<G11 User={User}/>}/>
+                    <Route path='/Scoring' element={<Scoring User={User}/>}/>
+                    <Route path='/Photograph' element={<Photograph User={User}/>}/>
                     <Route path='*' element={<Error/>}/>
                 </Routes>
             </Router>

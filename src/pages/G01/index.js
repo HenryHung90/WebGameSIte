@@ -9,11 +9,12 @@ import GameStructure from "./components/GameStructure";
 import GameScene from "./components/GameScene";
 import GameTimingGantt from "./components/GameTimingGantt";
 import GameGroupDivision from "./components/GameGroupDivision";
+import HomeMenu from "../components/html/HomeMenu";
 
 import $ from "jquery";
 import { useEffect, useState } from "react";
 
-const GroupOneHome = () => {
+const GroupOneHome = ({ User }) => {
   const [Scroll, setScroll] = useState("");
   useEffect(() => {
     $("html, body").animate({ scrollTop: 0 }, 300);
@@ -34,11 +35,15 @@ const GroupOneHome = () => {
   const PlayGame = (e) => {
     e.preventDefault();
     $(".GameContainer").fadeIn(500);
-    $("#Iframe").volume = 0;
+    $("html, body").animate({ scrollTop: 0 }, 100);
+    $("#HomeMenu").animate({ opacity: 0, zIndex: -1000 }, 100);
+    $("#Iframe").volume = 100;
   };
   const OutGame = (e) => {
     e.preventDefault();
     $(".GameContainer").fadeOut(500);
+    $("#HomeMenu").animate({ opacity: 1, zIndex: 1000 }, 100);
+    $("#Iframe").volume = 0;
   };
   const GoIntro = (e) => {
     e.preventDefault();
@@ -46,7 +51,10 @@ const GroupOneHome = () => {
   };
 
   return (
-    <div>
+    <div id="HomeContainer">
+      <div id="HomeMenu">
+        <HomeMenu User={User} />
+      </div>
       <div className="GameContainer">
         <Button
           id="GroupHome_PlayButton"
@@ -61,7 +69,7 @@ const GroupOneHome = () => {
       <div className="GroupHome">
         <div className="GroupHome_Main">
           <div className="GroupHome_MainText">
-            <img className="GroupHome_Cover" />
+            <div className="GroupHome_Cover" />
             <h1 className="GroupHome_GroupNumber">Group. 01</h1>
             <h1 className="GroupHome_GroupName">叫我大總裁</h1>
             <p className="GroupHome_GroupMember">

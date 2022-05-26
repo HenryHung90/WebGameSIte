@@ -1,3 +1,12 @@
+#HomeMenu{
+  z-index: 99999;
+  position:fixed;
+  top:0;
+  width:100%;
+  height:auto;
+  opacity: 1;
+}
+
 .GameContainer{
     position: absolute;
     width: 100%;
@@ -11,6 +20,7 @@
     width: 90%;
     height: 90%;
     margin-left:5%;
+    -webkit-scrollbar:none;
 }
 .GroupHome{
     z-index: -100;
