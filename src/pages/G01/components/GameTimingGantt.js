@@ -1,6 +1,6 @@
 const GameTimingGantt = () => {
   return (
-    <div className="GroupHome_TimingGantt">
+    <div className="GroupHome_TimingGantt" id="TimingGantt">
       <h1 className="GroupHome_Container_Text">時間規劃</h1>
       <div className="GroupHome_GameIntro_Text" id="GameTheme">
         <div className="GameIntroTitle">

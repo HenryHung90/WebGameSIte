@@ -2,8 +2,8 @@ import React from 'react';
 import {useState,useEffect } from 'react';
 import {
   BrowserRouter as Router,
-  Route,
   Routes,
+  Route,
 } from "react-router-dom";
 import {firebase} from './Firebase/firebase'
 
@@ -21,6 +21,7 @@ import G08 from './pages/G08'
 import G09 from './pages/G09'
 import G10 from './pages/G10'
 import G11 from './pages/G11'
+import Champ from './pages/Champ'
 import Scoring from './pages/Scoring'
 import Photograph from './pages/Photograph'
 
@@ -63,6 +64,7 @@ const Container = () =>{
                     <Route path='/G09' element={<G09 User={User}/>}/>
                     <Route path='/G10' element={<G10 User={User}/>}/>
                     <Route path='/G11' element={<G11 User={User}/>}/>
+                    <Route path='/Champ' element={<Champ User={User}/>}/>
                     <Route path='/Scoring' element={<Scoring User={User}/>}/>
                     <Route path='/Photograph' element={<Photograph User={User}/>}/>
                     <Route path='*' element={<Error/>}/>

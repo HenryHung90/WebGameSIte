@@ -10,6 +10,7 @@ import GameScene from "./components/GameScene";
 import GameTimingGantt from "./components/GameTimingGantt";
 import GameGroupDivision from "./components/GameGroupDivision";
 import HomeMenu from "../components/html/HomeMenu";
+import GameBarElement from "../components/html/GameBarElement";
 
 import $ from "jquery";
 import { useEffect, useState } from "react";
@@ -91,6 +92,7 @@ const GroupOneHome = ({ User }) => {
         </h3>
       </div>
       <div className="GroupHome_Container">
+        <GameBarElement />
         <GameIntro />
         <GameContent />
         <GameStructure />

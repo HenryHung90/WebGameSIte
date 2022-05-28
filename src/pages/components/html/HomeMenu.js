@@ -22,7 +22,7 @@ const HomeMenu = ({ User }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const Navigate = useNavigate();
 
-  const pages = ["評分", "課堂剪影"];
+  const pages = ["評分", "排行榜", "課堂剪影"];
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -30,8 +30,10 @@ const HomeMenu = ({ User }) => {
     setAnchorElNav(null);
     if (event.currentTarget.id === "0") {
       Navigate("/Scoring");
+    } else if (event.currentTarget.id === "1") {
+      Navigate("/Champ");
     } else {
-      Navigate("/photograph");
+      Navigate("/Photograph");
     }
   };
   return (

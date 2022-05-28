@@ -7,6 +7,13 @@
   opacity: 1;
 }
 
+.GameBar{
+    margin-top:10px;
+    display:flex;
+    justify-content:space-around;
+    width:70%;
+    margin: 0 auto;
+}
 .GameContainer{
     position: absolute;
     width: 100%;
@@ -111,7 +118,7 @@
 /**********GameContainer*****************************/
 .GroupHome_Container{
     position: absolute;
-    top:100%;
+    top:105%;
     width:100%;
     height:300%;
     text-align: center;

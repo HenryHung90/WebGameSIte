@@ -15,7 +15,7 @@ const GameStructure = () => {
   ];
 
   return (
-    <div className="GroupHome_GameStructure">
+    <div className="GroupHome_GameStructure" id="GameStructure">
       <h1 className="GroupHome_Container_Text">遊戲架構</h1>
       <div className="GroupHome_GameIntro_Text" id="GameProcess">
         <GameImageElement

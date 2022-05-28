@@ -14,7 +14,7 @@ const GameContent = () => {
   ];
 
   return (
-    <div className="GroupHome_GameContent">
+    <div className="GroupHome_GameContent" id="GameContent">
       <h1 className="GroupHome_Container_Text">遊戲設計</h1>
       <div className="GroupHome_GameIntro_Text" id="GameStory">
         <GameIntroElement

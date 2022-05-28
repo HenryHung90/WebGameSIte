@@ -97,7 +97,7 @@ const GameDesign = () => {
     ],
   ];
   return (
-    <div className="GroupHome_GameDesign">
+    <div className="GroupHome_GameDesign" id="GameDesign">
       <h1 className="GroupHome_Container_Text">遊戲美術設計</h1>
       <div className="GroupHome_GameIntro_Text" id="GameDesign">
         <GameImageElement

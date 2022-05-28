@@ -64,11 +64,14 @@ const Scoring = ({ User }) => {
     const dbRef = ref(db);
     const VoteTime = new Date().toString();
     const newKey = push(child(ref(db), "Score")).key;
-    for (let i = 1; i < 11; i++) {
+    for (let i = 1; i <= 11; i++) {
       let compare = `0${i}`;
+      if (i >= 10) {
+        compare = `${i}`;
+      }
       let NowCount = 0;
 
-      get(child(dbRef, `VoteCount/Group${compare}`))
+      get(child(dbRef, `${process.env.REACT_APP_FIREBASE_VOTECOUNT}${compare}`))
         .then((snapshot) => {
           if (snapshot.exists()) {
             NowCount = snapshot.val().GroupCount;
@@ -78,41 +81,70 @@ const Scoring = ({ User }) => {
         })
         .then((response) => {
           if (First === compare) {
-            set(ref(db, `Score/Group${compare}/${newKey}`), {
-              Name: User.UserName,
-              Email: User.UserEmail,
-              Time: VoteTime,
-              Vote: 3,
-            });
-            set(ref(db, `VoteCount/Group${compare}`), {
-              GroupCount: (NowCount += 3),
-            });
+            set(
+              ref(
+                db,
+                `${process.env.REACT_APP_FIREBASE_SCOREGROUP}${compare}/${newKey}`
+              ),
+              {
+                Name: User.UserName,
+                Email: User.UserEmail,
+                Time: VoteTime,
+                Vote: 3,
+              }
+            );
+            set(
+              ref(db, `${process.env.REACT_APP_FIREBASE_VOTECOUNT}${compare}`),
+              {
+                GroupCount: (NowCount += 3),
+              }
+            );
           }
           if (Second === compare) {
-            set(ref(db, `Score/Group${compare}/${newKey}`), {
-              Name: User.UserName,
-              Email: User.UserEmail,
-              Time: VoteTime,
-              Vote: 2,
-            });
-            set(ref(db, `VoteCount/Group${compare}`), {
-              GroupCount: (NowCount += 2),
-            });
+            set(
+              ref(
+                db,
+                `${process.env.REACT_APP_FIREBASE_SCOREGROUP}${compare}/${newKey}`
+              ),
+              {
+                Name: User.UserName,
+                Email: User.UserEmail,
+                Time: VoteTime,
+                Vote: 2,
+              }
+            );
+            set(
+              ref(db, `${process.env.REACT_APP_FIREBASE_VOTECOUNT}${compare}`),
+              {
+                GroupCount: (NowCount += 2),
+              }
+            );
           }
           if (Third === compare) {
-            set(ref(db, `Score/Group${compare}/${newKey}`), {
-              Name: User.UserName,
-              Email: User.UserEmail,
-              Time: VoteTime,
-              Vote: 1,
-            });
-            set(ref(db, `VoteCount/Group${compare}`), {
-              GroupCount: (NowCount += 1),
-            });
+            set(
+              ref(
+                db,
+                `${process.env.REACT_APP_FIREBASE_SCOREGROUP}${compare}/${newKey}`
+              ),
+              {
+                Name: User.UserName,
+                Email: User.UserEmail,
+                Time: VoteTime,
+                Vote: 1,
+              }
+            );
+            set(
+              ref(db, `${process.env.REACT_APP_FIREBASE_VOTECOUNT}${compare}`),
+              {
+                GroupCount: (NowCount += 1),
+              }
+            );
           }
         })
         .then((res) => {
-          set(ref(db, `IsVote/${newKey}`), { Email: User.UserEmail });
+          set(ref(db, `${process.env.REACT_APP_FIREBASE_CHECKVOTE}${newKey}`), {
+            Email: User.UserEmail,
+          });
         })
         .catch((error) => {
           console.error(error);
@@ -124,25 +156,27 @@ const Scoring = ({ User }) => {
     const dbRef = ref(db);
     let IsVoteEmail;
     let flag = false;
-    await get(child(dbRef, "IsVote/")).then((snapshot) => {
-      if (snapshot.exists()) {
-        IsVoteEmail = snapshot.val();
-      } else {
-        console.log("沒有任何人投票");
-      }
-      let VoteAry = Object.keys(IsVoteEmail).map((key) => {
-        return { ["Vote"]: IsVoteEmail[key] };
-      });
-      IsVoteEmail = [];
-      for (let i = 0; i < VoteAry.length - 1; i++) {
-        IsVoteEmail[i] = VoteAry[i].Vote.Email;
-        if (User.UserEmail == VoteAry[i].Vote.Email) {
-          window.alert("你已經投票過囉！");
-          flag = true;
-          break;
+    await get(child(dbRef, process.env.REACT_APP_FIREBASE_CHECKVOTE)).then(
+      (snapshot) => {
+        if (snapshot.exists()) {
+          IsVoteEmail = snapshot.val();
+        } else {
+          console.log("沒有任何人投票");
+        }
+        let VoteAry = Object.keys(IsVoteEmail).map((key) => {
+          return { ["Vote"]: IsVoteEmail[key] };
+        });
+        IsVoteEmail = [];
+        for (let i = 0; i < VoteAry.length - 1; i++) {
+          IsVoteEmail[i] = VoteAry[i].Vote.Email;
+          if (User.UserEmail == VoteAry[i].Vote.Email) {
+            window.alert("你已經投票過囉！");
+            flag = true;
+            break;
+          }
         }
       }
-    });
+    );
     return flag;
   }
 
@@ -154,24 +188,30 @@ const Scoring = ({ User }) => {
     CheckVote().then((res) => {
       if (!res) {
         Voting();
+        window.alert("投票完成！");
       }
     });
-    //Voting();
   };
   const DeleteVote = () => {
     Group.map((val) => {
-      remove(ref(db, `Score/Group${val}`));
-      remove(ref(db, `VoteCount/Group${val}`));
-      remove(ref(db, `IsVote/`));
+      remove(ref(db, `${process.env.REACT_APP_FIREBASE_SCOREGROUP}${val}`));
+      remove(ref(db, `${process.env.REACT_APP_FIREBASE_VOTECOUNT}${val}`));
+      remove(ref(db, process.env.REACT_APP_FIREBASE_CHECKVOTE));
     });
   };
 
   const CreatVote = () => {
-    set(ref(db, `IsVote/`), { _id: "test" });
+    set(ref(db, process.env.REACT_APP_FIREBASE_CHECKVOTE), { _id: "test" });
     Group.map((val) => {
-      const newKey = push(child(ref(db), `Score/Group${val}`)).key;
-      set(ref(db, `Score/Group${val}/`), { _id: newKey });
-      set(ref(db, `VoteCount/Group${val}/`), { GroupCount: 0 });
+      const newKey = push(
+        child(ref(db), `${process.env.REACT_APP_FIREBASE_SCOREGROUP}${val}`)
+      ).key;
+      set(ref(db, `${process.env.REACT_APP_FIREBASE_SCOREGROUP}${val}/`), {
+        _id: newKey,
+      });
+      set(ref(db, `${process.env.REACT_APP_FIREBASE_VOTECOUNT}${val}/`), {
+        GroupCount: 0,
+      });
     });
   };
 
@@ -208,9 +248,7 @@ const Scoring = ({ User }) => {
                 <td className="ScoringTable_td">第一名</td>
                 <td className="ScoringTable_td">
                   <FormControl variant="filled" sx={{ m: 1, minWidth: 400 }}>
-                    <InputLabel id="demo-simple-select-filled-label">
-                      第一名
-                    </InputLabel>
+                    <InputLabel id="demo-simple-select-filled-label"></InputLabel>
                     <Select
                       labelId="demo-simple-select-filled-label"
                       id="FirstStage"
@@ -232,9 +270,7 @@ const Scoring = ({ User }) => {
                 <td className="ScoringTable_td">第二名</td>
                 <td className="ScoringTable_td">
                   <FormControl variant="filled" sx={{ m: 1, minWidth: 400 }}>
-                    <InputLabel id="demo-simple-select-filled-label">
-                      第二名
-                    </InputLabel>
+                    <InputLabel id="demo-simple-select-filled-label"></InputLabel>
                     <Select
                       labelId="demo-simple-select-filled-label"
                       id="SecondStage"
@@ -256,9 +292,7 @@ const Scoring = ({ User }) => {
                 <td className="ScoringTable_td">第三名</td>
                 <td className="ScoringTable_td">
                   <FormControl variant="filled" sx={{ m: 1, minWidth: 400 }}>
-                    <InputLabel id="demo-simple-select-filled-label">
-                      第三名
-                    </InputLabel>
+                    <InputLabel id="demo-simple-select-filled-label"></InputLabel>
                     <Select
                       labelId="demo-simple-select-filled-label"
                       id="ThirdStage"

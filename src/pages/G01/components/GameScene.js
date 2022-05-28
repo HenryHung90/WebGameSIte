@@ -14,7 +14,7 @@ const GameScene = () => {
   ];
 
   return (
-    <div className="GroupHome_GameScene">
+    <div className="GroupHome_GameScene" id="GameScene">
       <h1 className="GroupHome_Container_Text">遊戲場景設計</h1>
       <div className="GroupHome_GameIntro_Text" id="GameScene">
         <GameImageElement

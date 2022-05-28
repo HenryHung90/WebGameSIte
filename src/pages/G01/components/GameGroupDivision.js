@@ -11,7 +11,7 @@ const GameGroupDivision = () => {
   ];
 
   return (
-    <div className="GroupHome_GroupDivision">
+    <div className="GroupHome_GroupDivision" id="GroupDivision">
       <h1 className="GroupHome_Container_Text">小組分工</h1>
       <div className="GroupHome_GameIntro_Text" id="GroupDivision">
         <GameIntroElement
