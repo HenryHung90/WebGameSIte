@@ -29,7 +29,7 @@
 }
 #Champaign{
     text-align:center;
-    width:10%;
+    width:15%;
     display: none;
 }
 #bar{
@@ -54,11 +54,11 @@
     color:gold
 }
 #LeaderBoard_2{
-    font-size:30px;
+    font-size:35px;
     color:silver
 }
 #LeaderBoard_3{
-    font-size:25px;
+    font-size:35px;
     color:brown
 }
 #ChampaignText h3{

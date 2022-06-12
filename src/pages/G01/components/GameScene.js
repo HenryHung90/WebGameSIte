@@ -5,13 +5,7 @@ const GameScene = () => {
 
   const Header = ["場景設計"];
 
-  const Content = [
-    [
-      "./Project/G02/img/Scene_1.png",
-      "./Project/G02/img/Scene_2.png",
-      "./Project/G02/img/Scene_3.png",
-    ],
-  ];
+  const Content = [["./Project/G01/img/DScene_1.png"]];
 
   return (
     <div className="GroupHome_GameScene" id="GameScene">

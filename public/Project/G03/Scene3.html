@@ -1,0 +1,2158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page3</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser-arcade-physics.js"></script>
+
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        const scene3_Config = {
+            key: 'scene3',
+            active: false,
+            preload: scene3_preload,
+            create: scene3_create,
+            update: scene3_update
+        };
+        const config = {
+            type: Phaser.AUTO,
+            width: 3840,
+            height: 2160,
+            //完整填滿畫布
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH
+            },
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: {
+                        y: 300
+                    },
+                    debug: false
+                }
+            },
+            scene: [scene3_Config]
+        };
+        var game = new Phaser.Game(config);
+        let cam;
+        let text;
+        let myFont;
+        let bookBtn, storyText, bookBg, textOver, nextBtn, closeBtn, closeBtn0;
+        // let tipsText, tipsBg;
+        let tipsBg, tipsText, tipsBg2, tipsText2, tipsBg3, tipsText3, tipsBg4, tipsText4, tipsBg5, tipsText5, tipsBg6,
+            tipsText6, tipsBg7, tipsText7, tipsBg8, tipsText8, tipsBg9, tipsText9, tipsBg10, tipsText10, tipsBg11,
+            tipsText11, tipsBg12, tipsText12, tipsBg13, tipsText13, tipsBg14, tipsText14, tipsBg15, tipsText15,
+            tipsBg16, tipsText16, tipsBg17, tipsText17;
+        let bookopen = 0;
+        let bgMusic3,openbookms;   
+
+        let bluebullBtnClick = 0;
+        let policecarBtnClick = 0;
+        let branchesBtnClick = 0;
+        let escalatorBtnClick = 0;
+        let garbageBtnClick = 0;
+        let hamburgerBtnClick = 0;
+        let healthtrailBtnClick = 0;
+        let hermitcrabBtnClick = 0;
+        let jewelryBtnClick = 0;
+        let strawberrymilkBtnClick = 0;
+        let tissueBtnClick = 0;
+        let tricycleBtnClick = 0;
+        let waterBtnClick = 0;
+        let waveeliminationblockBtnClick = 0;
+        let supermanBtnClick = 0;
+        let ministerBtnClick = 0;
+
+        let one = 0,two = 0,three = 0,four=0,five=0,six=0,sev=0,eig=0,nine=0,ten=0,ele=0,tw=0,tt=0,tf=0,tfv=0;
+        let over = [];
+        for (let i = 0; i < 32; i++) {
+            over[i] = '_____';
+        }
+        let story = [];
+        let bool1 = [0, 0, 0, 0, 0];
+        let bool2 = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let bool3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let level = 3;
+        //Show story 
+        let storyFontConfig = {
+            font: '60px 微軟正黑體',
+            fill: 'black'
+        }
+
+
+        function scene3_preload() {
+            this.load.image('third', './third/3.jpg');
+            this.load.image('NLbtn', './image/nextlevel.png');
+            //足跡圖
+            this.load.image('footer3', './third/footer3.png');
+
+            //書本按鈕素材
+            this.load.image('book', './image/book.png');
+            this.load.image('openbook', './image/openbook.jpeg');
+            this.load.image('next', './image/next.jpg');
+            this.load.image('close', './image/close.jpg');
+
+             //提示按鈕素材
+            this.load.image('tips', './tipsbtn/tips.png');
+            this.load.image('policecarBtn', './tipsbtn/policecarBtn.png');
+            this.load.image('bluebullBtn', './tipsbtn/bluebullBtn.png');
+            this.load.image('branchesBtn', './tipsbtn/branchesBtn.png');
+            this.load.image('garbageBtn', './tipsbtn/garbageBtn.png');
+            this.load.image('hamburgerBtn', './tipsbtn/hamburgerBtn.png');
+            this.load.image('healthtrailBtn', './tipsbtn/healthtrailBtn.png');
+            this.load.image('hermitcrabBtn', './tipsbtn/hermitcrabBtn.png');
+            this.load.image('jewelryBtn', './tipsbtn/jewelryBtn.png');
+            this.load.image('strawberrymilkBtn', './tipsbtn/strawberrymilkBtn.png');
+            this.load.image('tissueBtn', './tipsbtn/tissueBtn.png');
+            this.load.image('tricycleBtn', './tipsbtn/tricycleBtn.png');
+            this.load.image('waterBtn', './tipsbtn/waterBtn.png');
+            this.load.image('waveeliminationblockBtn', './tipsbtn/waveeliminationblockBtn.png');
+            this.load.image('supermanBtn', './tipsbtn/supermanBtn.png');
+            this.load.audio('openbookms', './music/book1.mp3');
+            this.load.audio('click', './music/click.mp3')
+            this.load.image('ministerBtn', './tipsbtn/ministerBtn.png');
+
+
+            //警車
+            this.load.image('policecarBlack', './third/policecarBlack.png');
+            this.load.spritesheet('policecarColor', './third/policecar.png', {
+                frameWidth: 325,
+                frameHeight: 231
+            });
+            //垃圾
+            this.load.image('garbagebagBlack', './third/garbagebagBlack.png');
+            this.load.spritesheet('garbagebag', './third/garbagebag.png', {
+                frameWidth: 82,
+                frameHeight: 120
+            });
+            //漢堡
+            this.load.image('hamburgerBlack', './third/hamburgerBlack.png');
+            this.load.spritesheet('hamburger', './third/hamburger.png', {
+                frameWidth: 68,
+                frameHeight: 61
+            });
+            //water
+            this.load.image('waterBlack', './third/waterBlack.png');
+            this.load.spritesheet('water', './third/water.png', {
+                frameWidth: 145,
+                frameHeight: 202
+            });
+            //superman
+            this.load.image('supermanBlack', './third/supermanBlack.png');
+            this.load.spritesheet('superman', './third/superman.png', {
+                frameWidth: 183,
+                frameHeight: 202
+            });
+            //部長
+            this.load.image('ministerBlack', './third/ministerBlack.png');
+            this.load.spritesheet('minister', './third/minister.png', {
+                frameWidth: 119,
+                frameHeight: 202
+            });
+            //三輪車
+            this.load.image('tricycleBlack', './third/tricycleBlack.png');
+            this.load.spritesheet('tricycle', './third/tricycle.png', {
+                frameWidth: 93,
+                frameHeight: 89
+            });
+            //寄居蟹
+            this.load.image('hermitcrabBlack', './third/hermitcrabBlack.png');
+            this.load.spritesheet('hermitcrabColor', './third/hermitcrabColor.png', {
+                frameWidth: 142,
+                frameHeight: 146
+            });
+            //redbull
+            this.load.image('bluebullBlack', './third/bluebullBlack.png');
+            this.load.image('bluebullColor', './third/bluebullColor.png');
+            //草莓牛奶
+            this.load.image('strawberrymilkBlack', './third/strawberrymilkBlack.png');
+            this.load.image('strawberrymilkColor', './third/strawberrymilkColor.png');
+            //首飾
+            this.load.image('jewelryBlack', './third/jewelryBlack.png');
+            this.load.image('jewelryColor', './third/jewelryColor.png');
+            //衛生紙
+            this.load.image('tissueBlack', './third/tissueBlack.png');
+            this.load.image('tissue', './third/tissueColor.png');
+            //樹枝
+            this.load.image('branchesBlack', './third/branchesBlack.png');
+            this.load.image('branches', './third/branchesColor.png');
+            //健康步道
+            this.load.image('healthtrailBlack', './third/healthtrailBlack.png');
+            this.load.image('healthtrail', './third/healthtrailColor.png');
+            //消波塊
+            this.load.image('waveeliminationblockBlack', './third/waveeliminationblockBlack.png');
+            this.load.image('waveeliminationblock', './third/waveeliminationblockColor.png');
+
+            //音樂
+            this.load.audio('bgMusic3', './music/4.mp3');
+
+            this.load.image('run', './image/run.png');
+
+        }
+
+        function scene3_create() {
+
+         
+
+this.cursors = this.input.keyboard.createCursorKeys();
+
+this.cameras.main.setBounds(0, 0, 3840, 2080);
+BG = this.add.image(config.width / 2, config.height / 2, 'third');
+
+policecarBlack = this.add.sprite(3300, 900, 'policecarBlack').setScale(1.5);
+garbagebagBlack = this.add.sprite(850, 380, 'garbagebagBlack');
+hamburgerBlack = this.add.sprite(3300, 1700, 'hamburgerBlack').setScale(3);
+waterBlack = this.add.sprite(2940, 360, 'waterBlack').setScale(3);
+supermanBlack = this.add.sprite(1980, 1850, 'supermanBlack').setScale(0.15);
+ministerBlack = this.add.sprite(2320, 780, 'ministerBlack').setScale(0.08);
+tricycleBlack = this.add.sprite(200, 905, 'tricycleBlack').setScale(1);
+hermitcrabBlack = this.add.sprite(920, 1920, 'hermitcrabBlack').setScale(0.06);
+tissueBlack = this.add.sprite(3260, 1570, 'tissueBlack').setScale(1);
+bluebullBlack = this.add.sprite(3300, 1570, 'bluebullBlack').setScale(1);
+waveeliminationblockBlack = this.add.sprite(3600, 1050, 'waveeliminationblockBlack').setScale(1);
+strawberrymilkBlack = this.add.sprite(3400, 1050, 'strawberrymilkBlack').setScale(2.0);
+jewelryBlack = this.add.sprite(2090, 250, 'jewelryBlack').setScale(0.06);
+branchesBlack = this.add.sprite(1170, 1220, 'branchesBlack').setScale(0.6);
+healthtrailBlack = this.add.sprite(300, 1540, 'healthtrailBlack').setScale(1);
+
+//足跡圖
+footer3 = this.add.sprite(config.width / 2, config.height / 2, "footer3").setScale(1.0);
+footer3.visible = false;
+
+cursors = this.input.keyboard.createCursorKeys();
+
+this.cameras.main.setZoom(3);
+this.cameras.main.centerOn(0, 0);
+
+cam = this.cameras.main;
+
+this.input.on("wheel", (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
+    if (deltaY > 0) { //縮小
+        if (cam.zoom > 1) {
+            cam.zoom -= 1;
+        }
+    }
+    if (deltaY < 0) { //放大
+        cam.zoom += 1;
+    }
+});
+
+//書本按鈕
+bookBtn = this.add.sprite(3650, 180, 'book').setScale(0.2);
+bookBtn.setInteractive();
+bookBtn
+    .on('pointerdown', () => {
+        if (bookopen == 0) {
+            bookopen = 1;
+            bookBg = this.add.sprite(config.width / 2, config.height / 2, 'openbook').setScale(4.5);
+            if (bool3[0] == 1) {
+                over[16] = '三輪車';
+            }
+            if (bool3[1] == 1) {
+                over[17] = '大洋遊俠和海超人';
+            }
+            if (bool3[2] == 1) {
+                over[18] = 'Red Bull';
+            }
+            if (bool3[3] == 1) {
+                over[19] = '漢堡';
+            }
+            if (bool3[4] == 1) {
+                over[20] = '衛生紙';
+            }
+            if (bool3[5] == 1) {
+                over[21] = '垃圾';
+            }
+            if (bool3[6] == 1) {
+                over[22] = '樹枝';
+            }
+            if (bool3[7] == 1) {
+                over[23] = '寄居蟹寶寶';
+            }
+            if (bool3[8] == 1) {
+                over[24] = '草莓牛奶';
+            }
+            if (bool3[9] == 1) {
+                over[25] = '消波塊';
+            }
+            story[2] = '阿JJ騎著' + over[16] +
+                '來到海灘，逛攤販的同時，他遇見了\n' + over[17] + '在跟海綿寶寶買美味蟹堡，用美式親嘴的\n方式和他們打招呼，他也叫了一杯' + over[18] +
+                '和' +
+                over[19] +
+                '跟他們一\n起坐在吧檯旁談心，大洋遊俠和海超人看出阿JJ的臉色不太\n好詢問了一下，阿JJ腦中瞬間浮上他與郝騰的種種回憶，\n情緒潰堤哭得一把鼻涕一把眼淚，擦眼淚擦鼻涕的' +
+                over[20] +
+                '\n瞬間佈滿整個桌上，阿JJ被安慰一番後，跟他們道別，準備\n散步散心了，他走在河堤邊看著有許多' + over[21] +
+                '的沙灘，順手\n就開始撿垃圾，看著正在搬家的寄居蟹，他用' + over[22] + '為他們\n畫了一條康莊大道，在黃昏的感性下，他看著最後一隻即\n將爬進水裡的' +
+                over[
+                    23] +
+                '，心中充滿著感動，他用雙手捧著\n寄居蟹寶寶和牠吻別，為了延續這份感性他去小七買了一瓶\n' + over[24] + '坐在' + over[25] +
+                '上看著夕陽慢慢的落下，喝完草莓牛\n奶微醺的心情讓他心情變好了許多。'
+            storyText = this.add.text(bookBg.x - 800, bookBg.y - 570, story[2], storyFontConfig);
+
+            //加下一頁按鈕
+            //按鈕按下換至第三關下
+            nextBtn = this.add.sprite(bookBg.x + 400, bookBg.y + 480, 'next').setScale(2);
+            nextBtn.setInteractive();
+            closeBtn = this.add.sprite(bookBg.x + 650, bookBg.y + 480, 'close').setScale(2.2);
+        }
+        if (bookopen == 1) {
+            bookopen = 0;
+            closeBtn.setInteractive();
+            closeBtn
+                .on('pointerdown', () => {
+                    bookBg.destroy();
+                    storyText.destroy();
+                    nextBtn.destroy();
+                    closeBtn.destroy();
+                    click = this.sound.add('click', {
+                        volume: 1
+                    });
+                    click.play();
+                });
+        }
+        nextBtn.on('pointerdown', () => {
+            openbookms = this.sound.add('openbookms', {
+                volume: 1
+            });
+            openbookms.play();
+            closeBtn.destroy();
+            storyText.destroy();
+
+            //第3關下 
+            if (bool3[10] == 1) {
+                over[26] = '白開水';
+            }
+            if (bool3[11] == 1) {
+                over[27] = '阿忠部長';
+            }
+            if (bool3[12] == 1) {
+                over[28] = '首飾';
+            }
+            if (bool3[13] == 1) {
+                over[29] = '健康步道';
+            }
+            if (bool3[14] == 1) {
+                over[30] = '警車';
+            }
+            story[3] = '走回海綿寶寶的攤販看到有一位腰瘦屁股翹的黑髮比基尼\n美眉，他心想天涯何處無芳草何必單戀一枝草，他向酒保\n借了吧台，搖了一杯' + over[
+                    26] +
+                '昂首闊步的走過去，他假裝撞\n到比基尼美眉，趁機摸了他的屁股，看到正面發現，完了\n是 ' + over[27] +
+                '，視線往阿忠部長後面一看是熱褲警察，阿JJ\n將白開水給隔壁的帥氣弟弟，拔腿狂奔，在期間他撞倒了\n賣很多' + over[28] +
+                '的攤販，為了躲避追查他選擇走' + over[29] +
+                '，他\n跑的梨花帶淚，看起來好不可憐 ，跑了將近一段時間後他\n在前方看見健康步道的盡頭，他扶著旁邊的扶手休息一下，\n好不容易走到盡頭發現，阿忠部長和熱褲刑警早就在路口\n等很久了，阿JJ很疑惑往旁邊一看，喔原來旁邊有手扶梯'+
+            '可\n以搭乘過來，最後阿忠部長和熱褲刑警為阿JJ銬上了手銬，搭著\n免費計程車a.k.a.' + over[30] +
+                '回到桃園租屋處隔離。'
+            storyText = this.add.text(bookBg.x - 800, bookBg.y - 520, story[3],
+                storyFontConfig);
+            closeBtn = this.add.sprite(bookBg.x + 650, bookBg.y + 480, 'close')
+                .setScale(2.2);
+            closeBtn.setInteractive();
+            nextBtn.destroy();
+            closeBtn
+                .on('pointerdown', () => {
+                    bookBg.destroy();
+                    storyText.destroy();
+                    closeBtn.destroy();
+                    click = this.sound.add('click', {
+                        volume: 1
+                    });
+                    click.play();
+                });
+        });
+        openbookms = this.sound.add('openbookms', {
+            volume: 1
+        });
+        openbookms.play();
+    });
+
+//第三關提示按鈕
+policecarBtn = this.add.sprite(1000, 1800, 'policecarBtn');
+policecarBtn.setInteractive();
+policecarBtn
+    .on('pointerdown', () => {
+        if (policecarBtnClick == 0) {
+            tipsBg = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            policecarBtnClick = 1;
+            story[0] = '停放在人群中';
+            tipsText = this.add.text(tipsBg.x - 230, tipsBg.y, story[0], storyFontConfig);
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+
+        } else if (policecarBtnClick == 1) {
+            tipsBg.setVisible(false);
+            tipsText.destroy();
+            policecarBtnClick = 0;
+        }
+    });
+
+//let tipsBg2,tipsText2; 
+bluebullBtn = this.add.sprite(600, 1800, 'bluebullBtn');
+bluebullBtn.setInteractive();
+bluebullBtn
+    .on('pointerdown', () => {
+        if (bluebullBtnClick == 0) {
+            tipsBg2 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '被放在餐桌上';
+            tipsText2 = this.add.text(tipsBg2.x - 230, tipsBg2.y, story[0], storyFontConfig);
+            bluebullBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else if (bluebullBtnClick == 1) {
+            tipsBg2.setVisible(false);
+            tipsText2.destroy();
+            bluebullBtnClick = 0;
+        }
+    });
+
+branchesBtn = this.add.sprite(800, 1800, 'branchesBtn');
+branchesBtn.setInteractive();
+branchesBtn
+    .on('pointerdown', () => {
+        if (branchesBtnClick == 0) {
+            tipsBg3 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '在人群中不起眼的地上';
+            tipsText3 = this.add.text(tipsBg3.x - 230, tipsBg3.y, story[0], storyFontConfig);
+            branchesBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+            branchesBtnClick = 0;
+            tipsBg3.setVisible(false);
+            tipsText3.destroy();
+        }
+    });
+
+garbageBtn = this.add.sprite(1200, 1800, 'garbageBtn');
+garbageBtn.setInteractive();
+garbageBtn
+    .on('pointerdown', () => {
+        if (garbageBtnClick == 0) {
+            tipsBg5 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '太臭了，被遺棄在邊邊';
+            tipsText5 = this.add.text(tipsBg5.x - 230, tipsBg5.y, story[0], storyFontConfig);
+            garbageBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+            garbageBtnClick = 0;
+            tipsBg5.setVisible(false);
+            tipsText5.destroy();
+
+        }
+    });
+
+hamburgerBtn = this.add.sprite(1400, 1800, 'hamburgerBtn');
+hamburgerBtn.setInteractive();
+hamburgerBtn
+    .on('pointerdown', () => {
+        if (hamburgerBtnClick == 0) {
+            tipsBg15 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '在餐桌附近';
+            tipsText15 = this.add.text(tipsBg15.x - 230, tipsBg15.y, story[0], storyFontConfig);
+            hamburgerBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+            hamburgerBtnClick = 0;
+            tipsBg15.setVisible(false);
+            tipsText15.destroy();
+        }
+    });
+healthtrailBtn = this.add.sprite(1600, 1800, 'healthtrailBtn');
+healthtrailBtn.setInteractive();
+healthtrailBtn
+    .on('pointerdown', () => {
+        if (healthtrailBtnClick == 0) {
+            tipsBg6 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '誰採到都會頭皮發麻';
+            tipsText6 = this.add.text(tipsBg6.x - 230, tipsBg6.y, story[0], storyFontConfig);
+            healthtrailBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+            healthtrailBtnClick = 0;
+            tipsBg6.setVisible(false);
+            tipsText6.destroy();
+
+        }
+    });
+hermitcrabBtn = this.add.sprite(1800, 1800, 'hermitcrabBtn');
+hermitcrabBtn.setInteractive();
+hermitcrabBtn
+    .on('pointerdown', () => {
+        if (hermitcrabBtnClick == 0) {
+            tipsBg7 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '可愛的小動物';
+            tipsText7 = this.add.text(tipsBg7.x - 230, tipsBg7.y, story[0], storyFontConfig);
+            hermitcrabBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+            hermitcrabBtnClick = 0;
+            tipsBg7.setVisible(false);
+            tipsText7.destroy();
+
+        }
+    });
+jewelryBtn = this.add.sprite(3600, 1800, 'jewelryBtn');
+jewelryBtn.setInteractive();
+jewelryBtn
+    .on('pointerdown', () => {
+        if (jewelryBtnClick == 0) {
+            tipsBg8 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '放置在店鋪中';
+            tipsText8 = this.add.text(tipsBg8.x - 230, tipsBg8.y, story[0], storyFontConfig);
+            jewelryBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+            jewelryBtnClick = 0;
+            tipsBg8.setVisible(false);
+            tipsText8.destroy();
+
+        }
+    });
+strawberrymilkBtn = this.add.sprite(2200, 1800, 'strawberrymilkBtn');
+strawberrymilkBtn.setInteractive();
+strawberrymilkBtn
+    .on('pointerdown', () => {
+        if (strawberrymilkBtnClick == 0) {
+            tipsBg9 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '被丟在一堆石頭邊邊';
+            tipsText9 = this.add.text(tipsBg9.x - 230, tipsBg9.y, story[0], storyFontConfig);
+            strawberrymilkBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+            strawberrymilkBtnClick = 0;
+            tipsBg9.setVisible(false);
+            tipsText9.destroy();
+        }
+    });
+tissueBtn = this.add.sprite(2400, 1800, 'tissueBtn');
+tissueBtn.setInteractive();
+tissueBtn
+    .on('pointerdown', () => {
+        if (tissueBtnClick == 0) {
+            tipsBg10 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '想想哪裡會使用到它';
+            tipsText10 = this.add.text(tipsBg10.x - 230, tipsBg10.y, story[0], storyFontConfig);
+            tissueBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+            tissueBtnClick = 0;
+            tipsBg10.setVisible(false);
+            tipsText10.destroy();
+        }
+    });
+tricycleBtn = this.add.sprite(2600, 1800, 'tricycleBtn');
+tricycleBtn.setInteractive();
+tricycleBtn
+    .on('pointerdown', () => {
+        if (tricycleBtnClick == 0) {
+            tipsBg11 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '騎到沙灘後就被遺棄\n在一旁';
+            tipsText11 = this.add.text(tipsBg11.x - 230, tipsBg11.y-50, story[0], storyFontConfig);
+            tricycleBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+            tricycleBtnClick = 0;
+            tipsBg11.setVisible(false);
+            tipsText11.destroy();
+        }
+    });
+waterBtn = this.add.sprite(2800, 1800, 'waterBtn');
+waterBtn.setInteractive();
+waterBtn
+    .on('pointerdown', () => {
+        if (waterBtnClick == 0) {
+            tipsBg12 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '有些人不能喝酒就喝水吧';
+            tipsText12 = this.add.text(tipsBg12.x - 230, tipsBg12.y, story[0], storyFontConfig);
+            waterBtnClick = 1;
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+            waterBtnClick = 0;
+            tipsBg12.setVisible(false);
+            tipsText12.destroy();
+
+        }
+    });
+waveeliminationblockBtn = this.add.sprite(3000, 1800, 'waveeliminationblockBtn');
+waveeliminationblockBtn.setInteractive();
+waveeliminationblockBtn
+    .on('pointerdown', () => {
+        if (waveeliminationblockBtnClick == 0) {
+            tipsBg13 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '堤坊常有的東西';
+            tipsText13 = this.add.text(tipsBg13.x - 230, tipsBg13.y, story[0], storyFontConfig);
+            waveeliminationblockBtnClick = 1;
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+            waveeliminationblockBtnClick = 0;
+            tipsBg13.setVisible(false);
+            tipsText13.destroy();
+
+        }
+    });
+
+supermanBtn = this.add.sprite(3400, 1800, 'supermanBtn');
+supermanBtn.setInteractive();
+supermanBtn
+    .on('pointerdown', () => {
+        if (supermanBtnClick == 0) {
+            tipsBg16 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '躲在人群中埋伏阿JJ';
+            tipsText16 = this.add.text(tipsBg16.x - 230, tipsBg16.y, story[0], storyFontConfig);
+            supermanBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (ministerBtnClick == 1) {
+                tipsBg17.setVisible(false);
+                tipsText17.destroy();
+            }
+        } else {
+
+            supermanBtnClick = 0;
+            tipsBg16.setVisible(false);
+            tipsText16.destroy();
+
+        }
+    });
+ministerBtn = this.add.sprite(3200, 1800, 'ministerBtn');
+ministerBtn.setInteractive();
+ministerBtn
+    .on('pointerdown', () => {
+        if (ministerBtnClick == 0) {
+            tipsBg17 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+            story[0] = '躲在人群中準備逮捕阿JJ';
+            tipsText17 = this.add.text(tipsBg17.x - 230, tipsBg17.y, story[0], storyFontConfig);
+            ministerBtnClick = 1;
+
+            if (policecarBtnClick == 1) {
+                tipsBg.setVisible(false);
+                tipsText.destroy();
+            }
+
+            if (bluebullBtnClick == 1) {
+                tipsBg2.setVisible(false);
+                tipsText2.destroy();
+            }
+
+            if (branchesBtnClick == 1) {
+                tipsBg3.setVisible(false);
+                tipsText3.destroy();
+            }
+
+            if (garbageBtnClick) {
+                tipsBg5.setVisible(false);
+                tipsText5.destroy();
+            }
+
+            if (hamburgerBtnClick) {
+                tipsBg15.setVisible(false);
+                tipsText15.destroy();
+            }
+
+            if (healthtrailBtnClick == 1) {
+                tipsBg6.setVisible(false);
+                tipsText6.destroy();
+            }
+
+            if (hermitcrabBtnClick == 1) {
+                tipsBg7.setVisible(false);
+                tipsText7.destroy();
+            }
+
+            if (jewelryBtnClick == 1) {
+                tipsBg8.setVisible(false);
+                tipsText8.destroy();
+            }
+
+            if (strawberrymilkBtnClick == 1) {
+                tipsBg9.setVisible(false);
+                tipsText9.destroy();
+            }
+
+            if (tissueBtnClick == 1) {
+                tipsBg10.setVisible(false);
+                tipsText10.destroy();
+            }
+
+            if (tricycleBtnClick == 1) {
+                tipsBg11.setVisible(false);
+                tipsText11.destroy();
+            }
+
+            if (waterBtnClick == 1) {
+                tipsBg12.setVisible(false);
+                tipsText12.destroy();
+            }
+
+            if (waveeliminationblockBtnClick == 1) {
+                tipsBg13.setVisible(false);
+                tipsText13.destroy();
+            }
+
+            if (supermanBtnClick == 1) {
+                tipsBg16.setVisible(false);
+                tipsText16.destroy();
+            }
+        } else {
+            ministerBtnClick = 0;
+            tipsBg17.setVisible(false);
+            tipsText17.destroy();
+
+        }
+    });
+
+//警車
+policecarBlack.setInteractive();
+policecarBlack.on('pointerdown', () => {
+
+    //書本bool 
+    bool3[14] == 1;
+    over[30] = '警車';
+    one = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            this.scene.start('scene4');
+        })
+
+    policecarBlack.destroy();
+    policecarColor = this.add.sprite(3300, 900, 'policecarColor').setScale(1.4);
+
+    this.anims.create({
+        key: 'policecar',
+        frames: this.anims.generateFrameNumbers('policecarColor', {
+            start: 0,
+            end: 2
+        }),
+        frameRate: 1.2,
+        repeat: -1
+    });
+    policecarColor.anims.play('policecar', true);
+});
+
+//垃圾
+garbagebagBlack.setInteractive();
+garbagebagBlack.on('pointerdown', () => {
+    bool3[5] == 1;
+    over[21] = '垃圾';
+    two = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+
+    garbagebagBlack.destroy();
+    garbagebagColor = this.add.sprite(850, 350, 'policecarColor').setScale(2);
+
+    this.anims.create({
+        key: 'garbagebag',
+        frames: this.anims.generateFrameNumbers('garbagebag', {
+            start: 0,
+            end: 2
+        }),
+        frameRate: 1.2, //代表播放影格的速度
+        repeat: -1 //代表重複次數，0預設，1代表重複一次，-1代表不斷重複
+    });
+    garbagebagColor.anims.play('garbagebag', true);
+
+});
+
+//漢堡
+hamburgerBlack.setInteractive();
+hamburgerBlack.on('pointerdown', () => {
+    //書本bool 
+    bool3[3] == 1;
+    over[19] = '漢堡';
+    three = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+
+    hamburgerBlack.destroy();
+    hamburgerColor = this.add.sprite(3300, 1680, 'hamburgerColor').setScale(3);
+
+    this.anims.create({
+        key: 'hamburger',
+        frames: this.anims.generateFrameNumbers('hamburger', {
+            start: 0,
+            end: 2
+        }),
+        frameRate: 1.2, //代表播放影格的速度
+        repeat: -1 //代表重複次數，0預設，1代表重複一次，-1代表不斷重複
+    });
+    hamburgerColor.anims.play('hamburger', true);
+
+});
+
+//water
+waterBlack.setInteractive();
+waterBlack.on('pointerdown', () => {
+    //書本bool
+    bool3[10] == 1;
+    over[26] = '白開水';
+
+    four = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+
+    waterBlack.destroy();
+    waterColor = this.add.sprite(2940, 360, 'waterColor').setScale(0.9);
+
+    this.anims.create({
+        key: 'water',
+        frames: this.anims.generateFrameNumbers('water', {
+            start: 0,
+            end: 2
+        }),
+        frameRate: 1.2, //代表播放影格的速度
+        repeat: -1 //代表重複次數，0預設，1代表重複一次，-1代表不斷重複
+    });
+    waterColor.anims.play('water', true);
+
+});
+
+//
+supermanBlack.setInteractive();
+supermanBlack.on('pointerdown', () => {
+    //書本bool 
+    bool3[1] == 1;
+    over[17] = '大洋遊俠和海超人';
+    five = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+
+    supermanBlack.destroy();
+    supermanColor = this.add.sprite(1980, 1860, 'supermanColor').setScale(1.3);
+
+    this.anims.create({
+        key: 'superman',
+        frames: this.anims.generateFrameNumbers('superman', {
+            start: 0,
+            end: 2
+        }),
+        frameRate: 1.2, //代表播放影格的速度
+        repeat: -1 //代表重複次數，0預設，1代表重複一次，-1代表不斷重複
+    });
+    supermanColor.anims.play('superman', true);
+
+});
+//部長
+ministerBlack.setInteractive();
+ministerBlack.on('pointerdown', () => {
+    //書本bool 
+    bool3[11] == 1;
+    over[27] = '阿忠部長';
+    six = 1;
+    three = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(0.2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+
+    ministerBlack.destroy();
+    ministerColor = this.add.sprite(2320, 780, 'ministerColor').setScale(0.8);
+
+    this.anims.create({
+        key: 'minister',
+        frames: this.anims.generateFrameNumbers('minister', {
+            start: 0,
+            end: 1
+        }),
+        frameRate: 1.2, //代表播放影格的速度
+        repeat: -1 //代表重複次數，0預設，1代表重複一次，-1代表不斷重複
+    });
+    ministerColor.anims.play('minister', true);
+
+});
+//三輪車
+tricycleBlack.setInteractive();
+tricycleBlack.on('pointerdown', () => {
+    //書本bool 
+    bool3[0] == 1;
+    over[16] = '三輪車';
+    sev = 1;
+    three = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+
+    tricycleBlack.destroy();
+    tricycleColor = this.add.sprite(190, 905, 'tricycleColor').setScale(2.2);
+
+    this.anims.create({
+        key: 'tricycle',
+        frames: this.anims.generateFrameNumbers('tricycle', {
+            start: 0,
+            end: 2
+        }),
+        frameRate: 1.2, //代表播放影格的速度
+        repeat: -1 //代表重複次數，0預設，1代表重複一次，-1代表不斷重複
+    });
+    tricycleColor.anims.play('tricycle', true);
+
+});
+
+//寄居蟹
+hermitcrabBlack.setInteractive();
+hermitcrabBlack.on('pointerdown', () => {
+     //書本bool 
+     bool3[7] == 1;
+     over[23] = '寄居蟹寶寶';
+    eig = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+
+    hermitcrabBlack.destroy();
+    hermitcrabColor = this.add.sprite(920, 1920, 'hermitcrabColor').setScale(1.8);
+
+    this.anims.create({
+        key: 'hermitcrabColor',
+        frames: this.anims.generateFrameNumbers('hermitcrabColor', {
+            start: 0,
+            end: 1
+        }),
+        frameRate: 1.2, //代表播放影格的速度
+        repeat: -1 //代表重複次數，0預設，1代表重複一次，-1代表不斷重複
+    });
+    hermitcrabColor.anims.play('hermitcrabColor', true);
+
+});
+
+//redbull
+bluebullBlack.setInteractive();
+bluebullBlack.on('pointerdown', () => {
+    //書本bool 
+    bool3[2] == 1;
+    over[18] = 'RedBull';
+    nine = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+
+    bluebullBlack.destroy();
+    bluebullColor = this.add.sprite(3300, 1570, 'bluebullColor').setScale(1.1);
+
+});
+
+//草莓牛奶
+strawberrymilkBlack.setInteractive();
+strawberrymilkBlack.on('pointerdown', () => {
+    //書本bool 
+    bool3[8] == 1;
+    over[24] = '草莓牛奶';
+    ten = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+    strawberrymilkBlack.destroy();
+    strawberrymilkColor = this.add.sprite(3400, 1050, 'strawberrymilkColor').setScale(2.0);
+
+});
+//首飾
+jewelryBlack.setInteractive();
+jewelryBlack.on('pointerdown', () => {
+    //書本bool 
+    bool3[12] == 1;
+    over[28] = '首飾';
+    ele = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1 &&ts==1 /*&&tsv=1*/) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+    jewelryBlack.destroy();
+    jewelryColor = this.add.sprite(2090, 250, 'jewelryColor').setScale(0.06);
+
+});
+//衛生紙
+tissueBlack.setInteractive();
+tissueBlack.on('pointerdown', () => {
+    //書本bool
+    bool3[4] == 1;
+    over[20] = '衛生紙';
+    tw = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+    tissueBlack.destroy();
+    tissue = this.add.sprite(3260, 1570, 'tissue').setScale(0.028);
+
+});
+//樹枝
+branchesBlack.setInteractive();
+branchesBlack.on('pointerdown', () => {
+    //書本bool 
+    bool3[6] == 1;
+    over[22] = '樹枝';
+    tt = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+    branchesBlack.destroy();
+    branches = this.add.sprite(1170, 1220, 'branches').setScale(0.6);
+
+});
+
+//健康步道
+healthtrailBlack.setInteractive();
+healthtrailBlack.on('pointerdown', () => {
+    //書本bool 
+    bool3[13] == 1;
+    over[29] = '健康步道';
+    tf = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+    healthtrailBlack.destroy();
+    healthtrail = this.add.sprite(280, 1560, 'healthtrail').setScale(0.18);
+
+});
+
+//消波塊
+waveeliminationblockBlack.setInteractive();
+waveeliminationblockBlack.on('pointerdown', () => {
+    //書本bool 
+    bool3[9] == 1;
+    over[25] = '消波塊';
+    tfv = 1;
+    if (one ==1 &&two ==1 &&three ==1 &&four==1 &&five==1 &&six==1 &&sev==1 &&eig==1 &&nine==1 &&ten==1 &&ele==1 &&tw==1 &&tt==1 &&tf==1 &&tfv==1) {
+        footer3.visible = true;
+        NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+        NLbtn.setInteractive();
+    }
+
+    NLbtn
+        .on('pointerdown', () => {
+            window.location='./Scene4.html';
+        })
+    waveeliminationblockBlack.destroy();
+    waveeliminationblock = this.add.sprite(3600, 1050, 'waveeliminationblock').setScale(1);
+    
+});
+
+NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setVisible(false);
+    //跑馬燈
+this.add.sprite(1930, 2140, 'run').setScale(0.8);
+
+myFont = {
+    font: '70px 微軟正黑體',
+    fill: 'black'
+};
+
+text = this.add.text(0, 2050,
+    '指揮中心呼籲，民眾應儘速完成疫苗接種，落實手部衛生、咳嗽禮節及佩戴口罩等個人防護措施，減少不必要移動、活動或集會，避免出入人多擁擠的場所，或高感染傳播風險場域，並主動積極配合各項防疫措施，下載及使用「臺灣社交距離APP」，共同嚴守社區防線。',
+    myFont);
+
+this.tweens.add({
+    targets: text,
+    duration: 20000,
+    x: {
+        from: 3840,
+        to: -12000
+    },
+    ease: 'linear',
+    repeat: -1,
+    yoyo: false
+});
+
+bgMusic3 = this.sound.add('bgMusic3', {
+    volume: 1,
+    loop: true
+});
+
+bgMusic3.play();
+}
+
+        function scene3_update() {
+            //按下鍵盤上下左右移動
+            if (this.cursors.left.isDown) {
+                this.cameras.main.scrollX -= 10;
+            } else if (this.cursors.right.isDown) {
+                this.cameras.main.scrollX += 10;
+            }
+            if (this.cursors.up.isDown) {
+                this.cameras.main.scrollY -= 10;
+            } else if (this.cursors.down.isDown) {
+                this.cameras.main.scrollY += 10;
+            }
+        }
+    </script>
+</body>
+
+</html>

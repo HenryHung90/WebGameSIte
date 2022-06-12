@@ -2,12 +2,14 @@ import GameIntroElement from "../../components/html/GameIntroElement";
 
 const GameGroupDivision = () => {
   const Box = ["Division"];
-  const Header = ["謝昀軒", "吳宜樺", "林劭謙", "洪立恒"];
+  const Header = ["姜昱呈", "張皓鈞", "吳松懋", "張劭禕", "侯君翰", "江秉成"];
   const Content = [
-    "介面、背景、動畫、人物、物件設計",
-    "第一關地圖設計、第一關程式、音樂",
-    "第三關地圖設計、第三關程式、物件互動程式設計",
-    "第二關地圖設計、第二關程式、粒子效果程式設計",
+    "程式前半段，企劃書主體",
+    "構思發想，問題提案想法，吉祥物",
+    "程式問題 Debug，角色素材設計",
+    "程式後半段主體，測試除錯，遊戲數值設計",
+    "美術主體，角色素材設計",
+    "企劃，腳本，主題構思",
   ];
 
   return (
@@ -39,6 +41,20 @@ const GameGroupDivision = () => {
           Box={Box[0]}
           Header={Header[3]}
           Content={Content[3]}
+        />
+      </div>
+      <div className="GroupHome_GameIntro_Text" id="GroupDivision">
+        <GameIntroElement
+          Box={Box[0]}
+          Header={Header[4]}
+          Content={Content[4]}
+        />
+      </div>
+      <div className="GroupHome_GameIntro_Text" id="GroupDivision">
+        <GameIntroElement
+          Box={Box[0]}
+          Header={Header[5]}
+          Content={Content[5]}
         />
       </div>
     </div>

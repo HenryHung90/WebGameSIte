@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Main</title>
+</head>
+
+<body>
+    <script>
+        const home_config = {
+            key: 'home',
+            active: true,
+            type: Phaser.AUTO,
+            width: 960,
+            height: 540,
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+            },
+            preload: function () {
+                console.log('homeload');
+                this.load.image('bg', './_img/bgDaylight.PNG');
+                this.load.image('play', './_img/keyplay.PNG');
+                this.load.image('skill', './_img/keyplay.PNG');
+            },
+            create: function () {
+                console.log('homecreate');
+                homebg = this.add.image(0, 0, 'bg').setOrigin(0, 0).setScale(0.5);
+                playBtn = this.add.image(home_config.width / 2, home_config.height / 2, 'play')
+                    .setScale(0.35)
+                    .setInteractive()
+                    .on('pointerover', () => {
+                        playBtn.setScale(0.385);
+                    })
+                    .on('pointerout', () => {
+                        playBtn.setScale(0.35);
+                    })
+                    .on('pointerup', () => {
+                        this.scene.start('scene1');
+                    });
+                skillBtn = this.add.image(home_config.width / 2, home_config.height / 2 + 100, 'skill')
+                    .setScale(0.35)
+                    .setInteractive()
+                    .on('pointerover', () => {
+                        skillBtn.setScale(0.385);
+                    })
+                    .on('pointerout', () => {
+                        skillBtn.setScale(0.35);
+                    })
+                    .on('pointerup', () => {
+                        //切換場景
+                    });
+
+            },
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: false,
+                    debug: false
+                }
+            }
+        };
+        const config = {
+            type: Phaser.AUTO,
+            width: 960,
+            height: 540,
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+            },
+            scene: [home_config],
+        };
+        const game = new Phaser.Game(config);
+        //console.log('f');
+    </script>
+</body>
+
+</html>

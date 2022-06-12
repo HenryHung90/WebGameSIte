@@ -11,7 +11,7 @@ const GameTimingGantt = () => {
         <div className="GameIntroSubtitle" id="SubImage">
           <img
             className="GameIntroSubtitle_Image"
-            src="./Project/G02/img/TimingGantt.png"
+            src="./Project/G01/img/TimingGantt.png"
             alt="時間規劃1"
           />
         </div>

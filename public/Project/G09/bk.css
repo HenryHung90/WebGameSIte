@@ -1,0 +1,8 @@
+body{
+    overflow: hidden;
+    scrollbar-width: false;
+    background-color: black;
+}
+    ::-webkit-scrollbar{
+    display: none;
+}

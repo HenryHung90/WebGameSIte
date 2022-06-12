@@ -6,12 +6,8 @@ const GameStructure = () => {
   const Header = ["流程設計", "腳本設計"];
 
   const Content = [
-    ["./Project/G02/img/Structure_1.png"],
-    [
-      "./Project/G02/img/Structure_2.png",
-      "./Project/G02/img/Structure_3.png",
-      "./Project/G02/img/Structure_4.png",
-    ],
+    ["./Project/G01/img/Structure_1.png"],
+    ["./Project/G01/img/Structure_2.png"],
   ];
 
   return (

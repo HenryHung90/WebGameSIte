@@ -52,6 +52,9 @@ const Home = ({ User }) => {
     //scrollTop就是觸發滾輪事件時滾輪的高度
   });
 
+  $(window).ready(() => {
+    $(".CenterBox").fadeIn(1500);
+  });
   const Logout = () => {
     firebase.auth().signOut();
     Navigate("/");
@@ -71,18 +74,21 @@ const Home = ({ User }) => {
             <HomeMenu User={User} />
           </div>
           <h3 id="HomeUser">歡迎回來 {User.UserName}</h3>
+          <Button
+            id="LogoutButton"
+            onClick={Logout}
+            variant="contained"
+            startIcon={<GoogleIcon />}
+            style={{
+              fontFamily: "pixel font",
+              fontSize: "20px",
+            }}
+          >
+            Logout
+          </Button>
           <GroupLine Group={Group} />
         </div>
       </div>
-      <Button
-        id="LogoutButton"
-        onClick={Logout}
-        variant="contained"
-        startIcon={<GoogleIcon />}
-        style={{ fontFamily: "pixel font", fontSize: "20px" }}
-      >
-        Logout
-      </Button>
     </div>
   );
 };

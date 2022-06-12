@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>防疫新運動輸了</title>
+</head>
+
+<body>
+    <script>
+        const lose_config = {
+            key: 'lose_config',
+            type: Phaser.AUTO,
+            backgroundColor: '#ffffff',
+            width: 960,
+            height: 540,
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+            },
+            scene: {
+                preload: lose_preload,
+                create: lose_create,
+                update: lose_update
+            },
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: false,
+                    debug: false
+                }
+            }
+        };
+
+        var game = new Phaser.Game(lose_config);
+        /*UI*/
+        let OhomeBtn, OrestartBtn, overBG;
+
+        function lose_preload() {
+            this.load.image('overbg', './_img/BGGameover.PNG');
+                this.load.image('Ohome', './_img/buttonhome.PNG');
+                this.load.image('Orestart', './_img/buttonrestart.PNG');
+        }
+        function lose_create() {
+            overBG = this.add.image(0, 0, 'overbg').setOrigin(0, 0).setScale(0.5);
+                OhomeBtn = this.add.image(lose_config.width / 2 - 150, 350, 'Ohome').setScale(0.5)
+                    .setInteractive()
+                    .on('pointerover', () => {
+                        OhomeBtn.setScale(0.55);
+                    })
+                    .on('pointerout', () => {
+                        OhomeBtn.setScale(0.5);
+                    })
+                    .on('pointerup', () => {
+                        this.scene.stop('lose_config');
+                        this.scene.start('home');
+                    });
+                OrestartBtn = this.add.image(lose_config.width / 2 + 150, 350, 'Orestart').setScale(0.5).setScale(0.5)
+                    .setInteractive()
+                    .on('pointerover', () => {
+                        OrestartBtn.setScale(0.55);
+                    })
+                    .on('pointerout', () => {
+                        OrestartBtn.setScale(0.5);
+                    })
+                    .on('pointerup', () => {
+                        this.scene.stop('lose_config');
+                        this.scene.start('scene1');
+                    });
+        }
+        function lose_update() {
+
+        }
+    </script>
+</body>
+
+</html>

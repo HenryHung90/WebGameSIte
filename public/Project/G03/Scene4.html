@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page4</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser-arcade-physics.js"></script>
+
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        const scene4_Config = {
+            key: 'scene4',
+            active: false,
+            preload: scene4_preload,
+            create: scene4_create,
+            update: scene4_update
+        };
+        const config = {
+            type: Phaser.AUTO,
+            width: 3840,
+            height: 2160,
+            //完整填滿畫布
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH
+            },
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: {
+                        y: 300
+                    },
+                    debug: false
+                }
+            },
+            scene: [scene4_Config]
+        };
+        var game = new Phaser.Game(config);
+        let cam;
+        let text;
+        let myFont;
+
+        function scene4_preload() {
+             //四張照片
+             this.load.image('comic0', './end/comic0.jpg');
+            this.load.image('comic1', './end/comic1.png');
+            this.load.image('comic2', './end/comic2.png');
+            this.load.image('comic3', './end/comic3.png');
+            this.load.image('comic4', './end/comic4.png');
+            this.load.image('clickme1', './end/clickme1.png');
+            this.load.image('clickme2', './end/clickme2.png');
+            this.load.image('clickme3', './end/clickme3.png');
+            this.load.image('clickme4', './end/clickme4.png');
+
+
+            this.load.image('startbtn', './image/startBtn.png');
+        }
+
+        function scene4_create() 
+        {
+            this.cursors = this.input.keyboard.createCursorKeys();
+            this.cameras.main.setBounds(0, 0, 3840, 2080);
+
+            comic0 = this.add.sprite(config.width / 2, config.height / 2, 'comic0').setScale(1.0);
+
+            
+            //pic1
+            clickme1 = this.add.sprite(1000,600,'clickme1').setScale(0.25);
+            clickme1.setInteractive();
+            clickme1.on('pointerdown', () => {
+                //comic1.destroy();
+                comic1 = this.add.sprite(1135,620,'comic1').setScale(0.57);
+                //console.log('find 2');
+            });
+
+            //pic2
+            clickme2 = this.add.sprite(3000,600,'clickme2').setScale(0.25);
+            clickme2.setInteractive();
+            clickme2.on('pointerdown', () => {
+                //comic1.destroy();
+                comic2 = this.add.sprite(2900,630,'comic2').setScale(0.5);
+            });
+
+            //pic3
+            clickme3 = this.add.sprite(900,1650,'clickme2').setScale(0.25);
+            clickme3.setInteractive();
+            clickme3.on('pointerdown', () => {
+                //comic1.destroy();
+                comic3 = this.add.sprite(1000,1650,'comic3').setScale(0.49);
+            });
+            //pic4
+            clickme3 = this.add.sprite(2750,1590,'clickme3').setScale(0.25);
+            clickme3.setInteractive();
+            clickme3.on('pointerdown', () => {
+                //comic1.destroy();
+                comic4 = this.add.sprite(2770,1649,'comic4').setScale(0.555);
+            });
+        }
+        function scene4_update() {
+        }
+    </script>
+</body>
+
+</html>

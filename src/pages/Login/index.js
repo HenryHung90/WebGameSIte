@@ -1,18 +1,13 @@
 import Button from "@mui/material/Button";
 import GoogleIcon from "@mui/icons-material/Google";
+import LoginSharpIcon from "@mui/icons-material/LoginSharp";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
 
 import { firebase } from "../../Firebase/firebase";
-const Login = ({ setIsUser }) => {
+const Login = ({ setIsUser, setUser }) => {
   const IsUser = useNavigate();
-  //   console.log(process.env.REACT_APP_APIKEY);
-  //   console.log(process.env.REACT_APP_AUTHDOMAIN);
-  //   console.log(process.env.REACT_APP_PROJECTID);
-  //   console.log(process.env.REACT_APP_STORAGEBUCKET);
-  //   console.log(process.env.REACT_APP_MESSAGINGSENDERID);
-  //   console.log(process.env.REACT_APP_APPID);
-  //   console.log(process.env.REACT_APP_MEASUREMENTID);
+
   const SignIpWithGoogle = () => {
     const google_Provider = new firebase.auth.GoogleAuthProvider();
     firebase
@@ -27,14 +22,35 @@ const Login = ({ setIsUser }) => {
       });
   };
 
+  const SignIpWithGuest = () => {
+    setIsUser();
+    let UserTempNode = {
+      UserName: "訪客",
+      UserEmail: "guest",
+      UserPhoto:
+        "https://icons.veryicon.com/png/o/miscellaneous/youyinzhibo/guest.png",
+    };
+    setUser(UserTempNode);
+    IsUser("/Home");
+  };
+
   return (
     <div className="LoginContainer">
       <Button
+        id="LoginGoogle"
         onClick={SignIpWithGoogle}
         variant="contained"
         startIcon={<GoogleIcon />}
       >
         Login With Google
+      </Button>
+      <Button
+        id="LoginGuest"
+        onClick={SignIpWithGuest}
+        variant="contained"
+        startIcon={<LoginSharpIcon />}
+      >
+        Login With Guest
       </Button>
     </div>
   );

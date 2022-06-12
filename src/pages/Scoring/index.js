@@ -7,12 +7,9 @@ import {
   ref,
   set,
   get,
-  update,
   push,
   remove,
   child,
-  onValue,
-  serverTimestamp,
 } from "firebase/database";
 import "./index.css";
 
@@ -25,7 +22,6 @@ import Select from "@mui/material/Select";
 
 const Scoring = ({ User }) => {
   const db = getDatabase();
-  const [Data, setData] = useState([]);
 
   const [First, setFirst] = useState("");
   const [Second, setSecond] = useState("");
@@ -54,10 +50,6 @@ const Scoring = ({ User }) => {
   function ThirdStageChange(e) {
     setThird(e.target.value);
   }
-
-  useEffect(() => {
-    const dbRef = ref(db);
-  }, []);
 
   //投票系統
   function Voting() {
@@ -169,7 +161,7 @@ const Scoring = ({ User }) => {
         IsVoteEmail = [];
         for (let i = 0; i < VoteAry.length - 1; i++) {
           IsVoteEmail[i] = VoteAry[i].Vote.Email;
-          if (User.UserEmail == VoteAry[i].Vote.Email) {
+          if (User.UserEmail === VoteAry[i].Vote.Email) {
             window.alert("你已經投票過囉！");
             flag = true;
             break;
@@ -181,6 +173,10 @@ const Scoring = ({ User }) => {
   }
 
   const SubmitVote = () => {
+    if (User.UserEmail === "guest") {
+      window.alert("訪客身份禁止投票！");
+      return;
+    }
     if (First === Second || First === Third || Second === Third) {
       window.alert("請勿重複投相同組別！");
       return;
@@ -215,14 +211,14 @@ const Scoring = ({ User }) => {
     });
   };
 
-  useEffect(() => {}, []);
-
   $(window).ready(function () {
+    $(".ScoringTitle").animate({ opacity: 1 }, 700);
+    $(".ScoringSubtitle").animate({ opacity: 1 }, 700);
     setTimeout(() => {
       $(".ScoringTitle").animate({ fontSize: "50px" }, 700);
       $(".ScoringSubtitle").animate({ fontSize: "20px" }, 700);
       $(".ScoringTableBox").fadeIn(1000);
-    }, 2000);
+    }, 1500);
   });
 
   return (

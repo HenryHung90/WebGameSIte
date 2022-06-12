@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>狗狗豬豬大冒險</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <link rel="icon" href="img/icon.png">
+    <script>
+        const config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 595,
+            //backgroundColor: '#DDDDDD',
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update,
+            },
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 300 },
+                    debug: false,
+                }
+            }
+        };
+
+        const game = new Phaser.Game(config);
+
+
+        let pig, wolf, dog; //角色(豬,狼,狗)
+        let player;
+        let cursor;
+        let movingPig, movingWolf, movingDog; //控制角色移動(控制豬,控制狼,控制狗)
+        let slide, ball, kid, ball2, plant, seesaw, kid2, swing, cage, tree, birdshome, poo, poo2, poo3, key; //可用於偵測物理碰撞的障礙物或需解決的對手(溜滑梯,球,屁孩,花盆,蹺蹺板,屁孩2,盪鞦韆,籠子)
+        let lands; //用於偵測有沒有掉落的地面
+        let life = 1; //生命值1，死了就重新開始
+        let restartText, startText; //重新開始按鈕、開始鈕
+        let bgMusic, audioTreasure, audioJump, audioFall, audioPoo, audioWater, audioKid, audioEnd, audioSkip, audioRun; //背景音樂跟音樂
+        //let audioJump, audioMove, audioTrample, audioClick, audioFall, audioPass, audioFail; //各類觸發音(跳,移動,踩踏,點選,掉落,過關,失敗)
+        let treasure = 0;
+        let treasureText;
+        let successText;
+        let failText;
+        let gameOver = false;
+        let startBtn, startPage;
+        let goBtn1, goPage1;
+        let goBtn2, goPage2;
+        let menu, first, second, third, fourth;
+        let lastland;//記得設定變數!!!
+
+        function preload() {
+
+            this.load.image('startpage', './img/startpage.png');
+            this.load.spritesheet('btn', './img/start1-01.png', { frameWidth: 180, frameHeight: 88 });
+
+            this.load.image('intro', './img/intro.png');
+            this.load.spritesheet('btn1', './img/go-01.png', { frameWidth: 98, frameHeight: 46 });
+
+            this.load.image('intro2', './img/intro2.png');
+            this.load.spritesheet('btn2', './img/go-01.png', { frameWidth: 98, frameHeight: 46 });
+
+            this.load.image('menu', './img/關卡列表.png');
+            this.load.spritesheet('first', './img/1.1-01.png', { frameWidth: 172, frameHeight: 338 });
+            this.load.spritesheet('second', './img/2-01.png', { frameWidth: 172, frameHeight: 338 });
+            this.load.spritesheet('third', './img/3-01.png', { frameWidth: 172, frameHeight: 338 });
+            this.load.spritesheet('fourth', './img/4-01.png', { frameWidth: 172, frameHeight: 338 });
+
+            this.load.image('bg', './img/bg.png');
+            this.load.spritesheet('pig', './img/pig.png', { frameWidth: 280, frameHeight: 300 });
+            this.load.image('slide', './img/slide.png');
+            this.load.image('ball', './img/ball.png');
+            this.load.spritesheet('kid', './img/kid-01.png', { frameWidth: 95, frameHeight: 120 });
+            this.load.image('ball2', './img/ball2.png');
+            this.load.image('plant', './img/plant.png');
+            this.load.image('seesaw', './img/seesaw.png');
+            this.load.spritesheet('kid2', './img/kid-01.png', { frameWidth: 95, frameHeight: 120 });
+            this.load.image('swing', './img/swing.png');
+            this.load.image('jail', './img/jail.png');
+            this.load.image('lands', './img/lands.png');
+            this.load.image('tree', './img/tree.png');
+            this.load.image('trunk', './img/trunk.png');
+            this.load.spritesheet('bird', './img/bird.png', { frameWidth: 2666, frameHeight: 2501 });
+            this.load.image('birdshome', './img/birdshome.png');
+            this.load.image('key', './img/key.png');
+            this.load.image('poo', './img/poo.png');
+            this.load.image('water', './img/water.png');
+            this.load.image('bone', './img/bone.png');
+            this.load.image('doughnut', './img/doughnut.png');
+            this.load.image('dog', './img/cry dog.png');
+            this.load.image('bar', './img/bar.png');
+            this.load.image('doughnut', './img/doughnut.png');
+
+            this.load.image('speaker', './assets/speaker.jpg');
+            this.load.image('mute', './assets/mute.png');
+            this.load.image('play', './assets/play.png');
+            this.load.image('pause', './assets/pause.png');
+
+            this.load.audio('audioJump', './assets/audio/jump08.mp3');
+            this.load.audio('bgMusic', './assets/audio/bgmusic.mp3');
+            this.load.audio('audioFall', './assets/audio/6796.mp3');
+            this.load.audio('audioPoo', './assets/audio/poo.mp3');
+            this.load.audio('audioWater', './assets/audio/poka01.mp3');
+            this.load.audio('audioTreasure', './assets/audio/treasure.mp3');
+            this.load.audio('audioChild', './assets/audio/child.mp3');
+            this.load.audio('audioEnd', './assets/audio/cry.mp3');
+            this.load.audio('audioSkip', './assets/audio/skip.mp3');
+            this.load.audio('audioRun', './assets/audio/run.mp3');
+        }
+        function create() {
+
+            this.add.image(0, 0, 'bg').setScale(2).setOrigin(0);//背景
+            this.physics.world.setBounds(0, 0, 6350, 600);
+
+            lands = this.physics.add.staticGroup(); //把地板全部加進一個群組 比較好控制
+            lands.create(300, 550, 'lands').setScale(1).refreshBody();
+            lands.create(400, 550, 'lands').setScale(1).refreshBody();
+            lands.create(1200, 550, 'lands').setScale(1).refreshBody();
+            lands.create(1400, 550, 'lands').setScale(1).refreshBody();
+            lands.create(2200, 550, 'lands').setScale(1).refreshBody();
+            lands.create(2700, 550, 'lands').setScale(1).refreshBody();
+            lands.create(3500, 550, 'lands').setScale(1).refreshBody();
+            lands.create(3900, 550, 'lands').setScale(1).refreshBody();
+            lands.create(4650, 550, 'lands').setScale(1).refreshBody();
+            lands.create(5000, 550, 'lands').setScale(1).refreshBody();
+            lands.create(6400, 550, 'lands').setScale(1).refreshBody();//這是監獄正下方的那塊，監獄沒打開，主角就永遠踩不到
+
+            lastland = this.physics.add.staticGroup();
+            lastland.create(5810, 550, 'lands').setScale(1).refreshBody();
+
+            /*lastland.create(6400, 550, 'lands').setScale(1).refreshBody();*/
+            //創造地板(x, y是座標) (setscale是大小)
+
+            player = this.physics.add.sprite(100, 400, 'pig').setScale(0.3); //設定角色顯示大小
+            player.setBounce(0);//設定角色彈跳值
+            player.setCollideWorldBounds(true);
+
+            //相機設定
+            // cam.setBounds(0,0,3200,600);
+            this.cameras.main.setBounds(0, 0, 6350, 600);   //(相機的位置和能夠延伸的大小範圍  根據背景圖片的寬度做更動 高度不更動)
+            this.cameras.main.setSize(800, 600);    //根據你初始化面想呈現的寬度做更動 高度不更動
+            this.cameras.main.startFollow(player, false, 0.2, 0.2);  //相機跟著玩家移動
+
+            // this.add.text(this.cameras.main.worldView.x + this.cameras.main.width / 2, this.cameras.main.worldView.y + this.cameras.main.height / 2 +130, '', myFont).setOrigin(0.5);
+
+
+            this.anims.create({
+                key: 'left',
+                frames: this.anims.generateFrameNumbers('pig', {
+                    start: 4,
+                    end: 6
+                }),
+                frameRate: 10,
+                repeat: -1
+            });
+            this.anims.create({
+                key: 'turn',
+                frames: [{
+                    key: 'pig',
+                    frame: 3
+                }],
+                frameRate: 20
+            });
+            this.anims.create({
+                key: 'right',
+                frames: this.anims.generateFrameNumbers('pig', {
+                    start: 0,
+                    end: 2
+                }),
+                frameRate: 10,
+                repeat: -1
+            });
+
+
+            // this.anims.create({
+            //     key: 'fly',
+            //     frames: this.anims.generateFrameNumbers('bird', {
+            //         start: 0,
+            //         end: 4
+            //     }),
+            //     frameRate: 10,
+            //     repeat: -1
+            // });
+            // this.bird.anims.play('fly', true);
+
+            cursors = this.input.keyboard.createCursorKeys();
+
+            //pig =  //設定初始位置(高、寬).可在此設定它要不要偵測邊界
+            //wolf = ...設定初始位置(高、寬).可在此設定它要不要偵測邊界
+            //dog = ... 設定初始位置(高、寬).可在此設定它要不要偵測邊界
+            bar = this.physics.add.sprite(500, 410, 'bar').setScale(0.15); //設定初始位置(高、寬)
+            //slide.setCollideWorldBounds(true);
+            bar.body.moves = false;
+            bar.body.immovable = true;
+
+            poo = this.physics.add.sprite(500, 300, 'poo').setScale(0.1); //設定初始位置(高、寬)
+            //slide.setCollideWorldBounds(true);
+            poo.body.moves = false;
+            poo.body.immovable = true;
+
+            ball = this.physics.add.sprite(1050, 450, 'ball').setScale(0.2); //設定初始位置(高、寬)
+            // ball.setCollideWorldBounds(true);
+            ball.body.moves = false;
+            ball.body.immovable = true;
+
+            kid = this.physics.add.sprite(1350, 450, 'kid').setScale(1); //設定初始位置(高、寬).可在此設定它要不要偵測邊界
+            // kid.setCollideWorldBounds(true);
+            kid.body.moves = false;
+            kid.body.immovable = true;
+            // // this.anims.create({
+            // //     key: 'walk',
+            // //     frames: this.anims.generateFrameNumbers('kid',{
+            // //         start: 0,
+            // //         end: 3,
+            // //         frameRate: 10,
+            // //         repeat: -1
+            // //     })
+            // // });
+            // // this.kid.anims.play('walk', true);
+
+
+
+            bone = this.physics.add.sprite(1320, 100, 'bone').setScale(0.1); //設定初始位置(高、寬).可在此設定它要不要偵測邊界
+            //kid.setCollideWorldBounds(true);
+            bone.body.moves = false;
+            bone.body.immovable = true;
+            bone.setVisible(false);
+
+            water = this.physics.add.sprite(1730, 200, 'water').setScale(0.04); //設定初始位置(高、寬)
+            //slide.setCollideWorldBounds(true);
+            water.body.moves = false;
+            water.body.immovable = true;
+
+            ball2 = this.physics.add.sprite(1550, 430, 'ball2').setScale(0.3); //設定初始位置(高、寬)
+            //ball2.setCollideWorldBounds(true);
+            ball2.body.moves = false;
+            ball2.body.immovable = true;
+
+            plant = this.physics.add.sprite(2100, 450, 'plant').setScale(0.1); //設定初始位置(高、寬)
+            //plant.setCollideWorldBounds(true);
+            plant.body.moves = false;
+            plant.body.immovable = true;
+
+            plant = this.physics.add.sprite(5880, 450, 'plant').setScale(0.1); //設定初始位置(高、寬)
+            //plant.setCollideWorldBounds(true);
+            plant.body.moves = false;
+            plant.body.immovable = true;
+
+            poo2 = this.physics.add.sprite(2400, 470, 'poo').setScale(0.1); //設定初始位置(高、寬)
+            //slide.setCollideWorldBounds(true);
+            poo2.body.moves = false;
+            poo2.body.immovable = true;
+
+            seesaw = this.physics.add.sprite(2700, 450, 'seesaw').setScale(0.2); //設定初始位置(高、寬)
+            //seesaw.setCollideWorldBounds(true);
+            seesaw.body.moves = false;
+            seesaw.body.immovable = true;
+
+            // 第一棵樹
+            trunk = this.physics.add.sprite(3350, 450, 'trunk').setScale(0.02); //設定初始位置(高、寬)
+            //trunk.setCollideWorldBounds(true);
+            trunk.body.moves = false;
+            trunk.body.immovable = true;
+
+            tree4 = this.physics.add.sprite(3300, 350, 'tree').setScale(0.015); //設定初始位置(高、寬)
+            //tree.setCollideWorldBounds(true);
+            tree4.body.moves = false;
+            tree4.body.immovable = true;
+
+            tree5 = this.physics.add.sprite(3400, 350, 'tree').setScale(0.015); //設定初始位置(高、寬)
+            //tree.setCollideWorldBounds(true);
+            tree5.body.moves = false;
+            tree5.body.immovable = true;
+
+            water3 = this.physics.add.sprite(3550, 325, 'water').setScale(0.04); //設定初始位置(高、寬)
+            //slide.setCollideWorldBounds(true);
+            water3.body.moves = false;
+            water3.body.immovable = true;
+
+            tree6 = this.physics.add.sprite(3350, 300, 'tree').setScale(0.015); //設定初始位置(高、寬)
+            //tree.setCollideWorldBounds(true);
+            tree6.body.moves = false;
+            tree6.body.immovable = true;
+
+            // 第二棵樹
+            trunk = this.physics.add.sprite(3750, 400, 'trunk').setScale(0.033); //設定初始位置(高、寬)
+            //trunk.setCollideWorldBounds(true);
+            trunk.body.moves = false;
+            trunk.body.immovable = true;
+
+            tree = this.physics.add.sprite(3700, 250, 'tree').setScale(0.015); //設定初始位置(高、寬)
+            //tree.setCollideWorldBounds(true);
+            tree.body.moves = false;
+            tree.body.immovable = true;
+
+            tree2 = this.physics.add.sprite(3800, 250, 'tree').setScale(0.015); //設定初始位置(高、寬)
+            //tree.setCollideWorldBounds(true);
+            tree2.body.moves = false;
+            tree2.body.immovable = true;
+
+            key = this.physics.add.sprite(3800, 200, 'key').setScale(0.2); //設定初始位置(高、寬)
+            //tree.setCollideWorldBounds(true);
+            key.body.moves = false;
+            key.body.immovable = true;
+
+            tree3 = this.physics.add.sprite(3750, 200, 'tree').setScale(0.015); //設定初始位置(高、寬)
+            //tree.setCollideWorldBounds(true);
+            tree3.body.moves = false;
+            tree3.body.immovable = true;
+
+            this.bird = this.add.sprite(100, 100, 'bird').setScale(0.05);
+            this.anims.create({
+                key: 'fly',
+                frames: this.anims.generateFrameNumbers('bird', {
+                    start: 0,
+                    end: 4,
+                    frameRate: 5,
+                    repeat: -1
+                })
+            });
+            // this.bird.anims.play('fly', true);
+
+            poo3 = this.physics.add.sprite(4000, 470, 'poo').setScale(0.1); //設定初始位置(高、寬)
+            //slide.setCollideWorldBounds(true);
+            poo3.body.moves = false;
+            poo3.body.immovable = true;
+
+            kid2 = this.physics.add.sprite(4700, 450, 'kid2').setScale(1); //設定初始位置(高、寬).可在此設定它要不要偵測邊界
+            //kid2.setCollideWorldBounds(true);
+            kid2.body.moves = false;
+            kid2.body.immovable = true;
+
+            doughnut = this.physics.add.sprite(4730, 130, 'doughnut').setScale(0.05); //設定初始位置(高、寬).可在此設定它要不要偵測邊界
+            //kid2.setCollideWorldBounds(true);
+            doughnut.body.moves = false;
+            doughnut.body.immovable = true;
+            doughnut.setVisible(false);
+
+            swing = this.physics.add.sprite(5000, 450, 'swing').setScale(0.05); //設定初始位置(高、寬)
+            //swing.setCollideWorldBounds(true);
+            swing.body.moves = false;
+            swing.body.immovable = true;
+
+            water2 = this.physics.add.sprite(5050, 327, 'water').setScale(0.04); //設定初始位置(高、寬)
+            //slide.setCollideWorldBounds(true);
+            water2.body.moves = false;
+            water2.body.immovable = true;
+
+            crydog = this.physics.add.sprite(6200, 430, 'dog').setScale(0.05);
+            crydog.body.moves = false;
+            crydog.body.immovable = true;
+
+            jail = this.physics.add.sprite(6200, 400, 'jail').setScale(0.2);
+            jail.body.moves = false;
+            jail.body.immovable = true;
+
+            //靜音跟取消靜音
+
+            speaker = this.add.image(30, 300, 'speaker').setScale(0.05)
+            speaker
+                .setInteractive()
+                .on('pointerdown', () => {
+                    if (speaker.texture.key == 'speaker') {
+                        speaker.setTexture('mute');
+                    } else {
+                        speaker.setTexture('speaker');
+                    }
+                    //判斷播放狀態
+                    if (bgMusic.mute) {
+                        bgMusic.setMute(false);
+                    } else {
+                        bgMusic.setMute(true);
+                    }
+                })
+
+            // 寶物
+            treasureText = this.add.text(160, 30, '寶物蒐集數量: 0', {
+                fontSize: '30px',
+                fill: 'brown',
+                stroke: '2px solid brown',
+                backgroundColor: 'white',
+                strokeRadius: '10%',
+                padding: 10,
+
+            });
+            // this.treasureText.setBounds(0,0,6350, 600);
+            // treasureText = this.add.text(this.cameras.main.worldView.x + this.cameras.main.width / 2, this.cameras.main.worldView.y + this.cameras.main.height / 2 - 50).setOrigin(0.5);
+            // 重新開始
+            restartText = restartText = this.add.text(config.width / 2 - 100, config.height / 2 - 40, '重新開始', {
+                fontSize: '40px 微軟正黑體',
+                color: 'white',
+                padding: 10,
+                backgroundColor: 'black'
+
+            });
+
+            restartText.visible = false;
+            restartText.setInteractive().on('pointerdown', (pointer, localX, localY, event) => {
+
+                treasureText = 0;
+                gameOver = false;
+
+                this.scene.restart();
+                resetTreasure();
+            })
+
+            // 成功字
+            successText = this.add.text(5500, 100, '成功蒐集 3 樣寶物救出狗勾！流下感動淚水', {
+                fontSize: '40px 微軟正黑體',
+                color: 'blue',
+                padding: 10,
+                backgroundColor: 'yellow'
+            })
+
+            successText.setInteractive().on('pointerdown', (pointer, localX, localY, event) => {
+                treasureText = 0;
+                gameOver = false;
+                this.scene.restart();
+                resetTreasure();
+                bgMusic.pause();
+
+
+            })
+
+            successText.visible = false;
+
+            failText = this.add.text(5600, 100, '失敗了，好像還少了什麼，狗勾哭哭', {
+                fontSize: '40px 微軟正黑體',
+                color: 'blue',
+                padding: 10,
+                backgroundColor: 'yellow'
+            })
+
+            failText.setInteractive()
+                .on('pointerdown', (pointer, localX, localY, event) => {
+                    treasureText = 0;
+                    gameOver = false;
+                    this.scene.restart();
+                    resetTreasure();
+                    bgMusic.pause();
+
+                })
+
+
+            failText.visible = false;
+
+            crydog.setInteractive()
+                .on('pointerdown', (pointer, localX, localY, event) => {
+                    treasureText = 0;
+                    gameOver = false;
+                    this.scene.restart();
+                    resetTreasure();
+                    bgMusic.pause();
+
+                })
+                .on('pointerover', (pointer, localX, localY, event) => {
+                    crydog.setScale(0.06);
+                })
+                .on('pointerout', (pointer, localX, localY, event) => {
+                    crydog.setScale(0.05);
+                })
+
+
+
+
+
+
+            //cage = ... 設定初始位置(高、寬)
+
+            //pig.anims.create(設置pig移動動畫)
+            //kid.anims.create(設置kid移動動畫)
+            //kid2.anims.create(設置kid2移動動畫)
+
+            //邊界偵測 (掉落時呼叫resetPig、resetKid、resetKid2、resetCage)，呼叫restartText、restart，促使遊戲重新開始
+            player.body.onWorldBounds = true;
+            this.physics.world.on('worldbounds', (body, up, down, left, right) => {
+                if (down) {
+                    bgMusic.pause();
+                    audioFall.play();
+                    gameOver = true;
+                    console.log('game over!');
+                    // player.setTint = (0xff0000);
+                    // this.physics.pause();
+                    // this.scene.restart();
+                }
+            });
+
+            //這裡全都是碰撞物體間碰撞偵測[這裡應該不用每個都註解吧，就是(某個東西,某個東西,他倆碰撞偵測的名字)]
+            this.physics.add.collider(player, bar);
+            this.physics.add.collider(player, ball);
+            // this.physics.add.collider(player, kid, collKid);
+            this.physics.add.collider(player, plant);
+            this.physics.add.collider(player, seesaw);
+            // this.physics.add.collider(player, kid2, collKid2);
+            this.physics.add.collider(player, swing);
+            // this.physics.add.collider(player, cage, collCage);
+            this.physics.add.collider(player, ball);
+            this.physics.add.collider(player, ball2);
+            this.physics.add.collider(player, swing);
+            this.physics.add.collider(player, tree);
+            this.physics.add.collider(player, tree2);
+            this.physics.add.collider(player, tree4);
+            this.physics.add.collider(player, tree5);
+            this.physics.add.collider(player, poo, stepPoo, null, this);
+            this.physics.add.collider(player, poo2, stepPoo2, null, this);
+            this.physics.add.collider(player, poo3, stepPoo3, null, this);
+            this.physics.add.collider(player, water, stepWater, null, this);
+            this.physics.add.collider(player, water2, stepWater2, null, this);
+            this.physics.add.collider(player, water3, stepWater3, null, this);
+            this.physics.add.collider(player, key, collectKey, null, this);
+            this.physics.add.collider(player, bone, collectBone, null, this);
+            this.physics.add.collider(player, doughnut, collectDoughnut, null, this);
+            this.physics.add.collider(player, jail);
+            this.physics.add.collider(player, kid, stepKid, null, this);
+            this.physics.add.collider(player, kid2, stepKid2, null, this);
+
+
+            // this.physics.add.collider(player, water); 
+
+            this.physics.add.collider(kid, lands);
+            // this.physics.add.collider(kid2, lands);
+
+            this.physics.add.collider(player, lands);   //player碰到lands有碰撞效果(某物體,某物體)
+            this.physics.add.collider(player, lastland, hitlastland, null, this);//就算是函式也不能跟物件名字撞!!
+
+            /*lastland = this.physics.add.collider(player, lastland);*/
+            this.physics.add.collider(kid, lands);
+            this.physics.add.collider(kid2, lands);
+            this.physics.add.collider(bar, lands);
+            this.physics.add.collider(ball, lands);
+            this.physics.add.collider(ball2, lands);
+            this.physics.add.collider(plant, lands);
+            this.physics.add.collider(seesaw, lands);
+            this.physics.add.collider(trunk, lands);
+            this.physics.add.collider(tree, lands);
+            this.physics.add.collider(swing, lands);
+            this.physics.add.collider(poo2, lands);
+            this.physics.add.collider(poo3, lands);
+            this.physics.add.collider(bone, lands);
+            this.physics.add.collider(water, lands);
+            // this.physics.add.collider(doughnut, lands);
+
+            this.physics.add.collider(crydog, lands);
+            this.physics.add.collider(jail, lands);
+
+            this.physics.add.collider(tree2, key);
+
+            menu = this.add.image(400, 297.5, 'menu').setScale(0.25);
+            first = this.add.sprite(120, 330, 'first').setInteractive()
+                .on('pointerover', () => {
+                    first.setFrame(1);
+                })
+                .on('pointerout', () => {
+                    first.setFrame(0);
+                })
+                .on('pointerdown', () => {
+                    first.setFrame(1);
+                })
+                .on('pointerup', () => {
+                    menu.destroy();
+
+                    first.destroy();
+                    second.destroy();
+                    third.destroy();
+                    fourth.destroy();
+                    audioSkip.play();
+                    audioSkip = this.sound.add('audioSkip', {
+                        volumn: 0
+                    });
+                });
+            second = this.add.sprite(300, 330, 'second').setInteractive()
+                .on('pointerover', () => {
+                    second.setFrame(0);
+                })
+                .on('pointerout', () => {
+                    second.setFrame(0);
+                })
+                .on('pointerdown', () => {
+                    second.setFrame(1);
+                })
+                .on('pointerup', () => {
+                    second.setFrame(1);
+                });
+            third = this.add.sprite(480, 330, 'third').setInteractive()
+                .on('pointerover', () => {
+                    third.setFrame(0);
+                })
+                .on('pointerout', () => {
+                    third.setFrame(0);
+                })
+                .on('pointerdown', () => {
+                    third.setFrame(1);
+                })
+                .on('pointerup', () => {
+                    third.setFrame(1);
+                });
+            fourth = this.add.sprite(660, 330, 'fourth').setInteractive()
+                .on('pointerover', () => {
+                    fourth.setFrame(0);
+                })
+                .on('pointerout', () => {
+                    fourth.setFrame(0);
+                })
+                .on('pointerdown', () => {
+                    fourth.setFrame(1);
+
+                })
+                .on('pointerup', () => {
+                    fourth.setFrame(1);
+                });
+
+            goPage2 = this.add.image(400, 297.5, 'intro2');
+            goBtn2 = this.add.sprite(570, 370, 'btn2').setInteractive()
+                .on('pointerover', () => {
+                    goBtn2.setFrame(1);
+                })
+                .on('pointerout', () => {
+                    goBtn2.setFrame(0);
+                })
+                .on('pointerdown', () => {
+                    goBtn2.setFrame(2);
+
+                    audioSkip = this.sound.add('audioSkip', {
+                        volumn: 0
+                    });
+                    audioSkip.play();
+                })
+                .on('pointerup', () => {
+                    goBtn2.destroy();
+                    goPage2.destroy();
+
+
+                });
+
+            goPage1 = this.add.image(400, 297.5, 'intro');
+            goBtn1 = this.add.sprite(570, 370, 'btn1').setInteractive()
+                .on('pointerover', () => {
+                    goBtn1.setFrame(1);
+                })
+                .on('pointerout', () => {
+                    goBtn1.setFrame(0);
+                })
+                .on('pointerdown', () => {
+                    goBtn1.setFrame(2);
+                    audioSkip = this.sound.add('audioSkip', {
+                        volumn: 0
+                    });
+                    audioSkip.play();
+
+                })
+                .on('pointerup', () => {
+                    goBtn1.destroy();
+                    goPage1.destroy();
+
+
+
+                });
+
+            startPage = this.add.image(400, 297.5, 'startpage');
+            startBtn = this.add.sprite(600, 500, 'btn').setInteractive()
+                .on('pointerover', () => {
+                    startBtn.setFrame(1);
+                })
+                .on('pointerout', () => {
+                    startBtn.setFrame(0);
+                })
+                .on('pointerdown', () => {
+                    startBtn.setFrame(2);
+
+                })
+                .on('pointerup', () => {
+                    startBtn.destroy();
+                    startPage.destroy();
+
+                    bgMusic.play();
+
+                });
+
+
+            // this.physics.add.collider(water, lands);
+
+            // this.physics.add.overlap(player, poo, stepPoo, null, this);
+
+
+
+
+
+
+            //記得設定物體碰撞後不產生物理移動(將物體固定在原地)
+
+            //設定startText、restartText文字內容(設定擺放位置高跟寬，記得要先隱藏起來，需要時再呼叫)
+
+
+            //audio.... = this.....要找到對的地方播(EX：控制跳的地方要加audioJump.play)
+            //記得要設定讓背景音樂播放
+            //音樂
+
+            //put audio on game scene
+
+            audioJump = this.sound.add('audioJump');
+            audioFall = this.sound.add('audioFall');
+            audioPoo = this.sound.add('audioPoo');
+            audioWater = this.sound.add('audioWater');
+            audioTreasure = this.sound.add('audioTreasure');
+            audioChild = this.sound.add('audioChild');
+            audioEnd = this.sound.add('audioEnd');
+            audioRun = this.sound.add('audioRun');
+
+            bgMusic = this.sound.add('bgMusic', {
+                volumn: 1,
+                loop: true
+            });
+
+        }
+
+        function update() {
+
+            if (cursors.left.isDown) {
+                player.setVelocityX(-160);
+                player.anims.play('left', true);
+                audioRun.play();
+            } else if (cursors.right.isDown) {
+                player.setVelocityX(160);
+                player.anims.play('right', true);
+                audioRun.play();
+            } else {
+                player.setVelocityX(0);
+                player.anims.play('turn');
+            }
+            if (cursors.up.isDown && player.body.touching.down) {
+                player.setVelocityY(-330);
+                audioJump.play();
+            }
+            //人物移動，if...else...
+
+
+            if (gameOver) {
+                restartText.setVisible(true); console.log('遊戲結束，重新開始')
+                player.setTint(0xff0000);
+                this.physics.pause();
+                // restartText = player.body.position;
+
+            }
+            if (treasure == 3) {
+                successText.setVisible(true);
+                failText.setVisible(false);
+                jail.destroy();
+            } else if (treasure < 3) {
+                successText.setVisible(false);
+                failText.setVisible(true);
+
+            }
+
+            // if (stepKid == true) {
+            //     cameras.zoom
+            // }
+
+            // if (ss){
+            //     successText.setVisible(true); console.log('成功救出！')
+
+            // }
+
+
+
+
+            // 讓字跟著人跑
+            treasureText.x = player.body.position.x - 325;
+            restartText.x = player.body.position.x;
+            speaker.x = player.body.position.x - 300;
+            // successText.x = player.body.position.x;
+
+
+            // 鳥飛飛
+            this.bird.anims.play('fly', true);
+            // this.kid.anims.play('walk', true);
+
+
+        }
+
+        function stepPoo() {
+
+            player.setScale(0.1);
+            poo.disableBody(true, true);
+            player.setTint(0xffff00);
+            audioPoo.play();
+
+        }
+
+        function stepPoo2() {
+
+            player.setScale(0.1);
+            poo2.disableBody(true, true);
+            player.setTint(0xffff00);
+            audioPoo.play();
+            // this.physics.pause();
+            // player.setTint(0xff0000);
+            // player.anims.play('turn');
+            // gameOver = true;
+
+        }
+
+        function stepPoo3() {
+
+            player.setScale(0.1);
+            poo3.disableBody(true, true);
+            player.setTint(0xffff00);
+            audioPoo.play();
+        }
+
+        function stepWater() {
+
+            player.setScale(0.3);
+            water.disableBody(true, true);
+            player.setTint();
+            audioWater.play();
+            // this.physics.pause();
+            // player.setTint(0xff0000);
+            // player.anims.play('turn');
+            // gameOver = true;
+
+        }
+
+        function stepWater2() {
+
+            player.setScale(0.3);
+            water2.disableBody(true, true);
+            player.setTint();
+            audioWater.play();
+            // this.physics.pause();
+            // player.setTint(0xff0000);
+            // player.anims.play('turn');
+            // gameOver = true;
+
+        }
+
+        function stepWater3() {
+
+            player.setScale(0.3);
+            water3.disableBody(true, true);
+            player.setTint();
+            audioWater.play();
+            // this.physics.pause();
+            // player.setTint(0xff0000);
+            // player.anims.play('turn');
+            // gameOver = true;
+
+        }
+
+
+
+        function collectBone(player, bone) {
+            bone.destroy(true);
+            treasure += 1;
+            treasureText.setText('寶物蒐集數量：' + treasure);
+            audioTreasure.play();
+        }
+
+        function collectKey(player, key) {
+            key.disableBody(true, true);
+            treasure += 1;
+            treasureText.setText('寶物蒐集數量：' + treasure);
+            audioTreasure.play();
+        }
+
+        function collectDoughnut(player, doughnut) {
+            doughnut.disableBody(true, true);
+            treasure += 1;
+            treasureText.setText('寶物蒐集數量：' + treasure);
+            audioTreasure.play();
+        }
+        function stepKid(player, kid) {
+            kid.disableBody(true, true);
+            bone.setVisible(true);
+            audioChild.play();
+        }
+        function stepKid2(player, kid2) {
+            kid2.disableBody(true, true);
+            doughnut.setVisible(true);
+            audioChild.play();
+        }
+        function resetTreasure() {
+            treasureText = 0;
+            treasure = 0;
+        }
+        function hitlastland(player, lastland) {
+            audioEnd.play();
+            console.log("撞到最後一塊，開始哭");
+        }
+
+
+
+
+
+
+
+        //function resetPig(){高、寬}
+        //function resetKid(){高、寬}
+        //function resetKid2(){高、寬}
+
+        //function restart(){將有移動的人物及物體放回原位}
+
+        //function collKid(pig, kid){碰撞後消失}
+        //function collKid2(pig, kid2){碰撞後消失}
+        //function collCage(pig, cage){判斷獲勝條件}
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

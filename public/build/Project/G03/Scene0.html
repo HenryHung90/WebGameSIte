@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Start</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser-arcade-physics.js"></script>
+
+    <style type="text/css">
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      const scene0_Config = {
+        key: "scene0",
+        active: true,
+        preload: scene0_preload,
+        create: scene0_create,
+        update: scene0_update,
+      };
+      const config = {
+        type: Phaser.AUTO,
+        width: 3840,
+        height: 2160,
+        //完整填滿畫布
+        scale: {
+          mode: Phaser.Scale.FIT,
+          autoCenter: Phaser.Scale.CENTER_BOTH,
+        },
+        physics: {
+          default: "arcade",
+          arcade: {
+            gravity: {
+              y: 300,
+            },
+            debug: false,
+          },
+        },
+        scene: [scene0_Config],
+      };
+      var game = new Phaser.Game(config);
+      let cam;
+      let text;
+      let myFont;
+      
+
+      function scene0_preload() {
+        this.load.image("frontBg", "./image/frontBg.jpg");
+        this.load.image("startbtn", "./image/startBtn.png");
+
+        //遊戲說明
+        this.load.image("closebtn", "./title page/closebtn.png");
+        this.load.image("howtoplayBtn", "./title page/howtoplayBtn.png");
+        this.load.image("howtoplayPic", "./title page/howtoplayPic.png");
+        this.load.audio("click", "./music/click.mp3");
+      }
+      function scene0_create() {
+        this.add
+          .image(config.width / 2, config.height / 2, "frontBg")
+          .setScale(2);
+        startBtn = this.add
+          .image(config.width / 2, 1550, "startbtn")
+          .setScale(2);
+
+        startBtn.setInteractive();
+        startBtn.on("pointerdown", () => {
+          window.location='./Scene1.html';
+          click = this.sound.add("click", {
+            volume: 1,
+          });
+          click.play();
+        });
+
+        //遊戲說明
+        HowtoplayBtn = this.add
+          .image(config.width / 2, 1980, "howtoplayBtn")
+          .setScale(2);
+        HowtoplayBtn.setInteractive();
+        HowtoplayBtn.on("pointerdown", () => {
+          HowtoplayPic = this.add.sprite(
+            config.width / 2,
+            config.height / 2,
+            "howtoplayPic"
+          );
+
+          closeBtn0 = this.add.image(2550, 1700, "closebtn").setScale(0.8);
+          closeBtn0.setInteractive();
+          closeBtn0.on("pointerdown", () => {
+            HowtoplayPic.destroy();
+            closeBtn0.destroy();
+            click = this.sound.add("click", {
+              volume: 1,
+            });
+            click.play();
+          });
+          click = this.sound.add("click", {
+            volume: 1,
+          });
+          click.play();
+        });
+      }
+
+      function scene0_update() {}
+    </script>
+  </body>
+</html>

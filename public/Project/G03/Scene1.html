@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page1</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser-arcade-physics.js"></script>
+
+  <style type="text/css">
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    const scene1_Config = {
+      key: 'scene1',
+      active: false,
+      preload: scene1_preload,
+      create: scene1_create,
+      update: scene1_update,
+    };
+    const config = {
+      type: Phaser.AUTO,
+      width: 1536,
+      height: 2048,
+      //完整填滿畫布
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+      },
+      physics: {
+        default: 'arcade',
+        arcade: {
+          gravity: {
+            y: 300,
+          },
+          debug: false,
+        },
+      },
+      scene: [scene1_Config]
+    };
+    
+    var game = new Phaser.Game(config);
+    let cam;
+    let text;
+    let myFont;
+    let bookBtn,
+      storyText,
+      bookBg,
+      textOver,
+      nextBtn,
+      closeBtn,
+      closeBtn0;
+
+
+    // let tipsText, tipsBg;
+    let tipsBg,
+      tipsText,
+      tipsBg2,
+      tipsText2,
+      tipsBg3,
+      tipsText3,
+      tipsBg4,
+      tipsText4,
+      tipsBg5,
+      tipsText5,
+      tipsBg6,
+      tipsText6,
+      tipsBg7,
+      tipsText7,
+      tipsBg8,
+      tipsText8,
+      tipsBg9,
+      tipsText9,
+      tipsBg10,
+      tipsText10,
+      tipsBg11,
+      tipsText11,
+      tipsBg12,
+      tipsText12,
+      tipsBg13,
+      tipsText13,
+      tipsBg14,
+      tipsText14,
+      tipsBg15,
+      tipsText15,
+      tipsBg16,
+      tipsText16,
+      tipsBg17,
+      tipsText17;
+    let bookopen = 0;
+    let bgMusic1, openbookms;
+    let keyBtnClick = 0;
+    let boxBtnClick = 0;
+    let underwearBtnClick = 0;
+    let riceBtnClick = 0;
+    let tubBtnClick = 0;
+    let j = 0,
+      k = 0,
+      l = 0,
+      m = 0,
+      n = 0;
+
+    let over = [];
+    for (let i = 0; i < 32; i++) {
+      over[i] = '_____';
+    }
+    let story = [];
+    let bool1 = [0, 0, 0, 0, 0];
+    let bool2 = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let bool3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let level = 3;
+    //Show story
+    let storyFontConfig = {
+      font: '42px 微軟正黑體',
+      fill: 'black',
+    };
+
+    function scene1_preload() {
+      this.load.image('oneBg', './first/oneBg.jpg');
+      this.load.image('NLbtn', './image/nextlevel.png');
+      //足跡圖
+      this.load.image('footer1', './first/footer1.png');
+
+      //書本按鈕素材
+      this.load.image('book', './image/book.png');
+      this.load.image('openbook', './image/openbook.jpeg');
+      this.load.image('next', './image/next.jpg');
+      this.load.image('close', './image/close.jpg');
+
+      //提示按鈕素材
+      this.load.image('tips', './tipsbtn/tips.png');
+      this.load.image('boxBtn', './tipsbtn/boxBtn.png');
+      this.load.image('keyBtn', './tipsbtn/keyBtn.png');
+      this.load.image('underwearBtn', './tipsbtn/underwearBtn.png');
+      this.load.image('tubBtn', './tipsbtn/tubBtn.png');
+      this.load.image('riceBtn', './tipsbtn/riceBtn.png');
+      this.load.audio('bgMusic1', './music/1.mp3');
+      this.load.audio('openbookms', './music/book1.mp3');
+      this.load.audio('click', './music/click.mp3')
+
+      //內褲
+      this.load.image('underwearBlack', './first/underwearBlack.png');
+      this.load.image('underwearColor', './first/underwearColor.png');
+      //浴缸
+      this.load.image('bathBlack', './first/bathBlack.png');
+      this.load.spritesheet('bath', './first/bath.png', {
+        frameWidth: 1992,
+        frameHeight: 2048,
+      });
+      //神秘包裹
+      this.load.image('boxBlack', './first/boxBlack.png');
+      this.load.image('boxColor', './first/boxColor.png');
+      //豬腳
+      this.load.image('riceBlack', './first/riceBlack.png');
+      this.load.spritesheet('rice', './first/rice.png', {
+        frameWidth: 1859,
+        frameHeight: 2048,
+      });
+      //鑰匙
+      this.load.image('keyBlack', './first/keyBlack.png');
+      this.load.image('keyColor', './first/keyColor.png');
+    }
+
+    function scene1_create() {
+      this.cursors = this.input.keyboard.createCursorKeys();
+      this.cameras.main.setBounds(0, 0, 1536, 2048);
+      BG = this.add.image(config.width / 2, config.height / 2, 'oneBg');
+
+      //放圖
+      underwearBlack = this.add
+        .sprite(1180, 1460, 'underwearBlack')
+        .setScale(0.04);
+      bathBlack = this.add.sprite(400, 620, 'bathBlack').setScale(0.1);
+      boxBlack = this.add.sprite(905, 1440, 'boxBlack').setScale(0.05);
+      riceBlack = this.add.sprite(1200, 1700, 'riceBlack').setScale(0.05);
+      keyBlack = this.add.sprite(940, 1000, 'keyBlack').setScale(0.02);
+
+      footer1 = this.add
+        .sprite(config.width / 2, config.height / 2, 'footer1')
+        .setScale(1.0);
+      footer1.visible = false;
+
+      cursors = this.input.keyboard.createCursorKeys();
+      this.cameras.main;
+      this.cameras.main.centerOn(0, 0);
+
+      cam = this.cameras.main;
+      this.input.on(
+        'wheel',
+        (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
+          if (deltaY > 0) {
+            //縮小
+            if (cam.zoom > 1) {
+              cam.zoom -= 1;
+            }
+          }
+          if (deltaY < 0) {
+            //放大
+            cam.zoom += 1;
+          }
+        }
+      );
+
+      //書本按鈕
+      bookBtn = this.add.sprite(1280, 180, 'book').setScale(0.2);
+      bookBtn.setInteractive();
+      bookBtn.on('pointerdown', () => {
+        if (bookopen == 0) {
+          bookopen = 1;
+          bookBg = this.add
+            .sprite(config.width / 2, config.height / 2, 'openbook')
+            .setScale(3);
+          if (bool1[0] == 1) {
+            over[0] = '內褲';
+          }
+          if (bool1[1] == 1) {
+            over[1] = '浴缸';
+          }
+          if (bool1[2] == 1) {
+            over[2] = '神秘包裹';
+          }
+          if (bool1[3] == 1) {
+            over[3] = '萬巒豬腳';
+          }
+          if (bool1[4] == 1) {
+            over[4] = '鑰匙';
+          }
+          story[0] =
+            '阿JJ在曬衣間收拾衣物準備要洗澡，收到一半發現' +
+            over[0] +
+            '不見\n了，回到房間打開水龍頭準備要洗澡時發現自己遲繳水費沒\n水了，趕緊跑去隔壁家借洗澡，還使用了鄰居家的' +
+            over[1] +
+            '泡了\n個澡，回房後阿JJ覺得在桃園好不順，因此跑回屏東，沒料\n到的是，他在屏東家篩出確診，阿JJ確診之後居然不乖乖待\n在屏東的家隔離，竟然為了拿他的' +
+            over[2] +
+            '急忙地跑回桃園，\n為了謝謝管理員幫忙代收，因此送她好吃的' +
+            over[3] +
+            '，上樓\n要進房間時，才發現' +
+            over[4] +
+            '不見了，但跟郝騰約的時間要到了，\n就先出門找他了。';
+          storyText = this.add.text(
+            bookBg.x - 570,
+            bookBg.y - 360,
+            story[0],
+            storyFontConfig
+          );
+          closeBtn = this.add
+            .sprite(1200, 1300, 'close')
+            .setScale(1.2);
+          closeBtn.setInteractive();
+          if (bookopen == 1) {
+            closeBtn.on('pointerdown', () => {
+              bookopen = 0;
+              bookBg.destroy();
+              storyText.destroy();
+              closeBtn.destroy();
+              click = this.sound.add('click', {
+                volume: 1,
+              });
+              click.play();
+            });
+          }
+
+          openbookms = this.sound.add('openbookms', {
+            volume: 1,
+          });
+          openbookms.play();
+        }
+      });
+
+      //第一關提示紐
+      boxBtn = this.add.sprite(400, 1900, 'boxBtn');
+      boxBtn.setInteractive();
+      keyBtn = this.add.sprite(600, 1900, 'keyBtn');
+      keyBtn.setInteractive();
+      underwearBtn = this.add.sprite(800, 1900, 'underwearBtn');
+      underwearBtn.setInteractive();
+      tubBtn = this.add.sprite(1000, 1900, 'tubBtn');
+      tubBtn.setInteractive();
+      riceBtn = this.add.sprite(1200, 1900, 'riceBtn');
+      riceBtn.setInteractive();
+
+      boxBtn.on('pointerdown', () => {
+        if (boxBtnClick == 0) {
+          tipsBg = this.add.sprite(
+            config.width / 2,
+            config.height / 2,
+            'tips'
+          );
+          boxBtnClick = 1;
+          story[0] = '長方體，被放置在地上';
+          tipsText = this.add.text(
+            tipsBg.x - 220,
+            tipsBg.y,
+            story[0],
+            storyFontConfig
+          );
+
+          if (keyBtnClick == 1) {
+            tipsBg2.setVisible(false);
+            tipsText2.destroy();
+          }
+
+          if (underwearBtnClick == 1) {
+            tipsBg3.setVisible(false);
+            tipsText3.destroy();
+          }
+
+          if (tubBtnClick == 1) {
+            tipsBg4.setVisible(false);
+            tipsText4.destroy();
+          }
+
+          if (riceBtnClick == 1) {
+            tipsBg5.setVisible(false);
+            tipsText5.destroy();
+          }
+        } else if (boxBtnClick == 1) {
+          tipsBg.setVisible(false);
+          tipsText.destroy();
+          boxBtnClick = 0;
+        }
+      });
+
+      keyBtn.on('pointerdown', () => {
+        if (keyBtnClick == 0) {
+          tipsBg2 = this.add.sprite(
+            config.width / 2,
+            config.height / 2,
+            'tips'
+          );
+          keyBtnClick = 1;
+          story[0] = '常常放在口袋裡\n忘了拎出來';
+          tipsText2 = this.add.text(
+            tipsBg2.x - 230,
+            tipsBg2.y - 50,
+            story[0],
+            storyFontConfig
+          );
+
+          if (boxBtnClick == 1) {
+            tipsBg.setVisible(false);
+            tipsText.destroy();
+          }
+
+          if (underwearBtnClick == 1) {
+            tipsBg3.setVisible(false);
+            tipsText3.destroy();
+          }
+
+          if (tubBtnClick == 1) {
+            tipsBg4.setVisible(false);
+            tipsText4.destroy();
+          }
+
+          if (riceBtnClick == 1) {
+            tipsBg5.setVisible(false);
+            tipsText5.destroy();
+          }
+        } else if (keyBtnClick == 1) {
+          tipsBg2.setVisible(false);
+          tipsText2.destroy();
+          keyBtnClick = 0;
+        }
+      });
+
+      underwearBtn.on('pointerdown', () => {
+        if (underwearBtnClick == 0) {
+          tipsBg3 = this.add.sprite(
+            config.width / 2,
+            config.height / 2,
+            'tips'
+          );
+          underwearBtnClick = 1;
+          story[0] = '被丟置在地上的四角褲';
+          tipsText3 = this.add.text(
+            tipsBg3.x - 220,
+            tipsBg3.y,
+            story[0],
+            storyFontConfig
+          );
+
+          if (boxBtnClick == 1) {
+            tipsBg.setVisible(false);
+            tipsText.destroy();
+          }
+
+          if (keyBtnClick == 1) {
+            tipsBg2.setVisible(false);
+            tipsText2.destroy();
+          }
+
+          if (tubBtnClick == 1) {
+            tipsBg4.setVisible(false);
+            tipsText4.destroy();
+          }
+
+          if (riceBtnClick == 1) {
+            tipsBg5.setVisible(false);
+            tipsText5.destroy();
+          }
+        } else if (underwearBtnClick == 1) {
+          tipsBg3.setVisible(false);
+          tipsText3.destroy();
+          underwearBtnClick = 0;
+        }
+      });
+
+      tubBtn.on('pointerdown', () => {
+        if (tubBtnClick == 0) {
+          tipsBg4 = this.add.sprite(
+            config.width / 2,
+            config.height / 2,
+            'tips'
+          );
+          tubBtnClick = 1;
+          story[0] = '在鄰居家的浴室';
+          tipsText4 = this.add.text(
+            tipsBg4.x - 200,
+            tipsBg4.y,
+            story[0],
+            storyFontConfig
+          );
+
+          if (boxBtnClick == 1) {
+            tipsBg.setVisible(false);
+            tipsText.destroy();
+          }
+
+          if (keyBtnClick == 1) {
+            tipsBg2.setVisible(false);
+            tipsText2.destroy();
+          }
+
+          if (underwearBtnClick == 1) {
+            tipsBg3.setVisible(false);
+            tipsText3.destroy();
+          }
+
+          if (riceBtnClick == 1) {
+            tipsBg5.setVisible(false);
+            tipsText5.destroy();
+          }
+        } else if (tubBtnClick == 1) {
+          tipsBg4.setVisible(false);
+          tipsText4.destroy();
+          tubBtnClick = 0;
+        }
+      });
+
+      riceBtn.on('pointerdown', () => {
+        if (riceBtnClick == 0) {
+          tipsBg5 = this.add.sprite(
+            config.width / 2,
+            config.height / 2,
+            'tips'
+          );
+          riceBtnClick = 1;
+          story[0] = '在管理員的桌上';
+          tipsText5 = this.add.text(
+            tipsBg5.x - 200,
+            tipsBg5.y,
+            story[0],
+            storyFontConfig
+          );
+
+          if (boxBtnClick == 1) {
+            tipsBg.setVisible(false);
+            tipsText.destroy();
+          }
+
+          if (keyBtnClick == 1) {
+            tipsBg2.setVisible(false);
+            tipsText2.destroy();
+          }
+
+          if (underwearBtnClick == 1) {
+            tipsBg3.setVisible(false);
+            tipsText3.destroy();
+          }
+
+          if (tubBtnClick == 1) {
+            tipsBg4.setVisible(false);
+            tipsText4.destroy();
+          }
+        } else if (riceBtnClick == 1) {
+          tipsBg5.setVisible(false);
+          tipsText5.destroy();
+          riceBtnClick = 0;
+        }
+      });
+
+      NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setVisible(false);
+      bgMusic1 = this.sound.add('bgMusic1', {
+        volume: 1,
+        loop: true
+      });
+      bgMusic1.play();
+
+      //內褲
+      underwearBlack.setInteractive();
+      underwearBlack.on('pointerdown', () => {
+        //書本bool
+        bool1[0] == 1;
+        over[0] = '內褲';
+
+        //足跡圖
+        j = 1;
+        if (j == 1 && k == 1 && l == 1 && m == 1 && n == 1) {
+          footer1.visible = true;
+          NLbtn = this.add
+            .image(config.width / 2, config.height / 2, 'NLbtn')
+            .setScale(2);
+          NLbtn.setInteractive();
+        }
+
+        NLbtn.on('pointerdown', () => {
+          window.location = './Scene2.html';
+        });
+
+        underwearBlack.destroy();
+        underwearColor = this.add
+          .sprite(1180, 1460, 'underwearColor')
+          .setScale(0.04);
+      });
+
+      //浴缸
+      bathBlack.setInteractive();
+      bathBlack.on('pointerdown', () => {
+        //書本底線換字bool
+        bool1[1] == 1;
+        over[1] = '浴缸';
+
+        //足跡圖
+        k = 1;
+        if (j == 1 && k == 1 && l == 1 && m == 1 && n == 1) {
+          footer1.visible = true;
+          NLbtn = this.add
+            .image(config.width / 2, config.height / 2, 'NLbtn')
+            .setScale(2);
+          NLbtn.setInteractive();
+        }
+
+        NLbtn.on('pointerdown', () => {
+          window.location = './Scene2.html';
+        });
+
+        bathBlack.destroy();
+        bath = this.add.sprite(400, 620, 'bath').setScale(0.1);
+
+        this.anims.create({
+          key: 'bath',
+          frames: this.anims.generateFrameNumbers('bath', {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 1.2,
+          repeat: -1,
+        });
+        bath.anims.play('bath', true);
+      });
+
+      //神秘包裹
+      boxBlack.setInteractive();
+      boxBlack.on('pointerdown', () => {
+        //書本底線換字bool
+        bool1[2] == 1;
+        over[2] = '神秘包裹';
+
+        //足跡圖
+        l = 1;
+        if (j == 1 && k == 1 && l == 1 && m == 1 && n == 1) {
+          footer1.visible = true;
+          NLbtn = this.add
+            .image(config.width / 2, config.height / 2, 'NLbtn')
+            .setScale(2);
+          NLbtn.setInteractive();
+        }
+
+        NLbtn.on('pointerdown', () => {
+          window.location = './Scene2.html';
+        });
+
+        boxBlack.destroy();
+        boxColor = this.add.sprite(905, 1440, 'boxColor').setScale(0.05);
+      });
+
+      //豬腳
+      riceBlack.setInteractive();
+      riceBlack.on('pointerdown', () => {
+        //書本底線換字bool
+        bool1[3] == 1;
+        over[3] = '萬巒豬腳';
+
+        //足跡圖
+        m = 1;
+        if (j == 1 && k == 1 && l == 1 && m == 1 && n == 1) {
+          footer1.visible = true;
+          NLbtn = this.add
+            .image(config.width / 2, config.height / 2, 'NLbtn')
+            .setScale(2);
+          NLbtn.setInteractive();
+        }
+
+        NLbtn.on('pointerdown', () => {
+          window.location = './Scene2.html';
+        });
+
+        riceBlack.destroy();
+        rice = this.add.sprite(1180, 1700, 'riceBlack').setScale(0.05);
+
+        this.anims.create({
+          key: 'rice',
+          frames: this.anims.generateFrameNumbers('rice', {
+            start: 0,
+            end: 2,
+          }),
+          frameRate: 1.2,
+          repeat: -1,
+        });
+        rice.anims.play('rice', true);
+      });
+
+      //鑰匙
+      keyBlack.setInteractive();
+      keyBlack.on('pointerdown', () => {
+        //書本bool
+        bool1[4] == 1;
+        over[4] = '鑰匙';
+
+        //足跡圖
+        n = 1;
+        if (j == 1 && k == 1 && l == 1 && m == 1 && n == 1) {
+          footer1.visible = true;
+          NLbtn = this.add
+            .image(config.width / 2, config.height / 2, 'NLbtn')
+            .setScale(2);
+          NLbtn.setInteractive();
+        }
+
+        NLbtn.on('pointerdown', () => {
+          window.location = './Scene2.html';
+        });
+
+        keyBlack.destroy();
+        keyColor = this.add.sprite(940, 1000, 'keyColor').setScale(0.02);
+      });
+    }
+
+
+    function scene1_update() {
+      //按下鍵盤上下左右移動
+      if (this.cursors.left.isDown) {
+        this.cameras.main.scrollX -= 10;
+      } else if (this.cursors.right.isDown) {
+        this.cameras.main.scrollX += 10;
+      }
+      if (this.cursors.up.isDown) {
+        this.cameras.main.scrollY -= 10;
+      } else if (this.cursors.down.isDown) {
+        this.cameras.main.scrollY += 10;
+      }
+    }
+  </script>
+</body>
+
+</html>

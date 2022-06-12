@@ -1,4 +1,5 @@
 import "../components/css/GroupHome.css";
+import "./index.css";
 import Button from "@mui/material/Button";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
@@ -30,7 +31,7 @@ const GroupOneHome = ({ User }) => {
   useEffect(() => {}, [Scroll]);
   function iframe() {
     return {
-      __html: `<iframe id="Iframe" src="./Project/G02/index.html" frameborder="0" width="100%" height="100%"/>`,
+      __html: `<iframe id="Iframe" src="" frameborder="0" width="100%" height="100%"/>`,
     };
   }
   const PlayGame = (e) => {
@@ -38,13 +39,15 @@ const GroupOneHome = ({ User }) => {
     $(".GameContainer").fadeIn(500);
     $("html, body").animate({ scrollTop: 0 }, 100);
     $("#HomeMenu").animate({ opacity: 0, zIndex: -1000 }, 100);
-    $("#Iframe").volume = 100;
+    $("#Iframe").attr("src", "./Project/G01/index.html");
+    $("body").css({ overflow: "hidden" });
   };
   const OutGame = (e) => {
     e.preventDefault();
     $(".GameContainer").fadeOut(500);
     $("#HomeMenu").animate({ opacity: 1, zIndex: 1000 }, 100);
-    $("#Iframe").volume = 0;
+    $("#Iframe").attr("src", "");
+    $("body").css({ overflow: "auto" });
   };
   const GoIntro = (e) => {
     e.preventDefault();
@@ -67,25 +70,26 @@ const GroupOneHome = ({ User }) => {
         </Button>
         <div className="Gaming" dangerouslySetInnerHTML={iframe()} />
       </div>
-      <div className="GroupHome">
+      <div className="GroupHome" id="GroupHome_G01">
         <div className="GroupHome_Main">
           <div className="GroupHome_MainText">
             <div className="GroupHome_Cover" />
-            <h1 className="GroupHome_GroupNumber">Group. 01</h1>
-            <h1 className="GroupHome_GroupName">叫我大總裁</h1>
-            <p className="GroupHome_GroupMember">
-              1082020 洪立恒 // 1082020 洪立恒 // 1082020 洪立恒
-            </p>
+            <h1 className="GroupHome_GroupNumber">Group.01</h1>
+            <h1 className="GroupHome_GroupName">Defenders</h1>
+            <h3 className="GroupHome_GroupMember">
+              姜昱呈、張皓鈞、吳松懋、張劭禕、侯君翰、江秉成
+            </h3>
+
             <Button
               id="GroupHome_PlayButton"
               onClick={PlayGame}
               variant="contained"
               startIcon={<PlayArrowIcon />}
             >
-              開始遊玩
+              遊戲試玩
             </Button>
           </div>
-          <div className="GroupHome_Image"></div>
+          <div className="GroupHome_Image" id="GroupHomeImage_G01"></div>
         </div>
         <h3 className="GroupHome_GoIntro" onClick={GoIntro}>
           下滑看介紹

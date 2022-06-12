@@ -8,6 +8,7 @@
     background-color: antiquewhite;
     border-radius: 1px;
     box-shadow: 0px 0px 0px 8px rgba(0,0,0,0.3); 
+    display: none;
 }
 
 /* 組別照片 */
@@ -18,28 +19,6 @@
     opacity: 0.3;
     width:200px;
     height:100%;
-    animation:sildeDown .7s steps(300,end);
-}
-@keyframes sildeDown {
-  0% {
-    opacity: 0;
-    height: 0;
-  }
-  10% {
-    opacity: 0.1;
-    height: 10%;
-  }
-  60% {
-    opacity: 0.2;
-    height: 50%;
-  }
-  90% {
-    opacity: 0.3;
-    height: 90%;
-  }
-  100%{
-      height: 100%;
-  }
 }
 .ShortCutBox:hover{
     transition-duration: .5s;
@@ -51,34 +30,36 @@
     background-image: url('../components/image/G01.jpeg');
 }
 #ShortCutBox_02 ,#GroupCard_02{
-    background-image:url('../components/image/G02.jpeg');
+    background-image:url('../components/image/G02_GroupHome_Image.jpg');
 }
 #ShortCutBox_03 ,#GroupCard_03{
-    background-image:url('../components/image/G03.jpeg');
+    background-image:url('../components/image/G03.png');
 }
 #ShortCutBox_04 ,#GroupCard_04{
-    background-image:url('../components/image/G04.jpeg');
+    background-image:url('../components/image/G04_GroupHome.png');
+    background-size: cover;
 }
 #ShortCutBox_05 ,#GroupCard_05{
-    background-image:url('../components/image/G05.jpeg');
+    background-image:url('../components/image/G05_GroupHome.png');
+    background-size: cover;
 }
 #ShortCutBox_06 ,#GroupCard_06{
-    background-image:url('../components/image/G06.jpeg');
+    background-image:url('../components/image/G06_GroupHome.png');
 }
 #ShortCutBox_07 ,#GroupCard_07{
-    background-image:url('../components/image/G07.jpeg');
+    background-image:url('../components/image/G07.png');
 }
 #ShortCutBox_08 ,#GroupCard_08{
     background-image:url('../components/image/G08.jpeg');
 }
 #ShortCutBox_09 ,#GroupCard_09{
-    background-image:url('../components/image/G09.jpeg');
+    background-image:url('../components/image/G09.png');
 }
 #ShortCutBox_10 ,#GroupCard_10{
-    background-image:url('../components/image/G10.jpeg');
+    background-image:url('../components/image/G10.png');
 }
 #ShortCutBox_11 ,#GroupCard_11{
-    background-image:url('../components/image/G11.jpeg');
+    background-image:url('../components/image/G11_GroupHome.png');
 }
 /* ******** */
 #HomeTitle{
@@ -97,8 +78,8 @@
     transform: translateX(-50%);
     font-size:7em;
     width:900px;
-    animation:typing 1s steps(300, end),
-    blink-caret 1s steps(15, end);
+    animation:typing 2s steps(1100, end),
+    blink-caret 2s steps(300, end);
 }
 #HomeUser{
   color:white;
@@ -127,10 +108,10 @@
 @keyframes blink-caret {
   from,
   to {
-    box-shadow: 1px 0 0 0 transparent;
+    box-shadow: 5px 0 0 0 transparent;
   }
   50% {
-    box-shadow: 1px 0 0 0;
+    box-shadow: 5px 0 0 0;
   }
 }
 #HomeBackground{
@@ -189,7 +170,7 @@
     width:297px;
     height:170px;
     background-color:white;
-    opacity: 0.7;
+    opacity: 0.9;
     border-radius:20px 20px 20px 20px;
     display: none;
 }
@@ -198,14 +179,11 @@
 }
 .GroupCard_GroupMember{
     margin-top:-10px;
-    font-size:12px;
+    font-size:20px;
 }
 
 #LogoutButton{
-  position:absolute;
-  top:120%;
-  left:45%;
-  transition:translateY(-50%);
+   left:47%;
 }
 #HomeContainer{
   padding-bottom: 50px;

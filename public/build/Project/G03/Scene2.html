@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page2</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser-arcade-physics.js"></script>
+
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        const scene2_Config = {
+            key: 'scene2',
+            active: false,
+            preload: scene2_preload,
+            create: scene2_create,
+            update: scene2_update
+        };
+        const config = {
+            type: Phaser.AUTO,
+            width: 3840,
+            height: 2160,
+            //完整填滿畫布
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH
+            },
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: {
+                        y: 300
+                    },
+                    debug: false
+                }
+            },
+            scene: [scene2_Config]
+        };
+        var game = new Phaser.Game(config);
+        let cam;
+        let text;
+        let myFont;
+        let bookBtn, storyText, bookBg, textOver, nextBtn, closeBtn, closeBtn0;
+        // let tipsText, tipsBg;
+        let tipsBg, tipsText, tipsBg2, tipsText2, tipsBg3, tipsText3, tipsBg4, tipsText4, tipsBg5, tipsText5, tipsBg6,
+            tipsText6, tipsBg7, tipsText7, tipsBg8, tipsText8, tipsBg9, tipsText9, tipsBg10, tipsText10, tipsBg11,
+            tipsText11, tipsBg12, tipsText12, tipsBg13, tipsText13, tipsBg14, tipsText14, tipsBg15, tipsText15,
+            tipsBg16, tipsText16, tipsBg17, tipsText17;
+        let bookopen = 0;
+        let bgMusic2,openbookms;    
+
+        let clerkBtnClick = 0;
+        let dogBtnClick = 0;
+        let latteBtnClick = 0;
+        let strokebBtnClick = 0;
+        let tissue2BtnClick = 0;
+        let alcoholBtnClick = 0;
+        let bathroomBtnClick = 0;
+        let bottle3BtnClick = 0;
+        let busBtnClick = 0;
+        let grandmaBtnClick = 0;
+        //第二關足跡
+        let a=0,b=0,c=0,d=0,e=0,f=0,g=0,h=0,i=0;
+
+        //存底線1092020
+        let over = [];
+        for (let i = 0; i < 32; i++) {
+            over[i] = '_____';
+        }
+        let story = []; //原文1092020
+        let bool1 = [0, 0, 0, 0, 0]; //第1關1092020
+        let bool2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //第2關1092020
+        let bool3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //第3關1092020
+        let level = 3;
+        //Show story 1092020
+        let storyFontConfig = {
+            font: '50px 微軟正黑體',
+            fill: 'black'
+        }
+
+        function scene2_preload() {
+            this.load.image('twoBg', './second/twoBg.jpg');
+            this.load.image('NLbtn', './image/nextlevel.png');
+            //足跡圖2057
+            this.load.image('footer2', './second/footer2.png');
+            //書本按鈕素材1092020
+            this.load.image('book', './image/book.png');
+            this.load.image('openbook', './image/openbook.jpeg');
+            this.load.image('next', './image/next.jpg');
+            this.load.image('close', './image/close.jpg');
+            //提示按鈕素材
+            this.load.image('tips', './tipsbtn/tips.png');
+            this.load.image('clerkBtn', './tipsbtn/clerkBtn.png');
+            this.load.image('dogBtn', './tipsbtn/dogBtn.png');
+            this.load.image('latteBtn', './tipsbtn/latteBtn.png');
+            this.load.image('strokebBtn', './tipsbtn/strokebBtn.png');
+            this.load.image('tissue2Btn', './tipsbtn/tissue2Btn.png');
+            this.load.image('alcoholBtn', './tipsbtn/alcoholBtn.png');
+            this.load.image('bathroomBtn', './tipsbtn/bathroomBtn.png');
+            this.load.image('bottle3Btn', './tipsbtn/bottle3Btn.png');
+            this.load.image('busBtn', './tipsbtn/busBtn.png');
+            this.load.image('grandmaBtn', './tipsbtn/grandmaBtn.png');
+            this.load.audio('openbookms', './music/book1.mp3');
+            this.load.audio('click', './music/click.mp3')
+            this.load.audio('bgMusic2', './music/3.mp3');
+            
+            //物件2057
+            //酒精噴
+            this.load.image('alcoholblack', './second/alcoholblack.png');
+            this.load.spritesheet('alcohol', './second/alcohol.png', {
+                frameWidth: 1390,
+                frameHeight: 2048
+            });
+            //馬桶
+            this.load.image('bathroomblack', './second/bathroomblack.png');
+            this.load.image('bathroomcolor', './second/bathroomcolor.png');
+            //水壺
+            this.load.image('bottle5black', './second/bottle5black.png');
+            this.load.spritesheet('bottle5', './second/bottle5.png', {
+                frameWidth: 933,
+                frameHeight: 2048
+            });
+            //水壺櫃
+            this.load.image('cabinetblack', './second/cabinetblack.png');
+            //公車
+            this.load.image('busblack', './second/busblack.png');
+            //站牌
+            this.load.image('busstopblack', './second/busstopblack.png');
+            this.load.spritesheet('busstop', './second/busstop.png', {
+                frameWidth: 933,
+                frameHeight: 2048
+            });
+            //拿鐵
+            this.load.image('latteblack', './second/latteblack.png');
+            this.load.image('lattecolor', './second/lattecolor.png');
+            //衛生紙
+            this.load.image('tissueblack', './second/tissueblack.png');
+            this.load.spritesheet('tissuecolor', './second/tissuecolor.png', {
+                frameWidth: 484,
+                frameHeight: 680
+            });
+            //店員
+            this.load.image('clerkBlack1', './second/clerkBlack1.png');
+            this.load.spritesheet('clerk', './second/clerk.png', {
+                frameWidth: 1491,
+                frameHeight: 2160
+            });
+            //狗勾
+            this.load.image('dogBlack3', './second/dogBlack3.png');
+            this.load.spritesheet('dog', './second/dog.png', {
+                frameWidth: 937,
+                frameHeight: 1000
+            });
+            //奶奶
+            this.load.image('grandmaBlack1', './second/grandmaBlack1.png');
+            this.load.spritesheet('grandma', './second/grandma.png', {
+                frameWidth: 2048,
+                frameHeight: 2048
+            });
+        }
+
+        function scene2_create() {
+            this.cursors = this.input.keyboard.createCursorKeys();
+            this.cameras.main.setBounds(0, 0, 3840, 2080);
+            BG = this.add.image(config.width / 2, config.height / 2, 'twoBg');
+
+            //物件
+            alcoholblack = this.add.sprite(1327, 255, 'alcoholblack').setScale(0.15);
+            bathroomblack = this.add.sprite(3080, 343, 'bathroomblack').setScale(0.26);
+            cabinetblack = this.add.sprite(2100, 264, 'cabinetblack').setScale(0.4);
+            bottle5black = this.add.sprite(2100, 350, 'bottle5black').setScale(0.08);
+            busblack = this.add.sprite(220, 220, 'busblack').setScale(0.4);
+            busstopblack = this.add.sprite(465, 380, 'busstopblack').setScale(0.4);
+            latteblack = this.add.sprite(2400, 1447, 'latteblack').setScale(0.15);
+            tissueblack = this.add.sprite(2400, 143, 'tissueblack').setScale(0.08);
+            clerkBlack1 = this.add.sprite(1005, 240, 'clerkBlack1').setScale(0.09);
+            dogBlack3 = this.add.sprite(3450, 960, 'dogBlack3').setScale(0.11);
+            grandmaBlack1 = this.add.sprite(2250, 1700, 'grandmaBlack1').setScale(0.13);
+
+            //足跡圖
+            footer2 = this.add.sprite(config.width / 2, config.height / 2, "footer2").setScale(1.0);
+            footer2.visible = false;
+
+            cursors = this.input.keyboard.createCursorKeys();
+            this.cameras.main.setZoom(3);
+            this.cameras.main.centerOn(0, 0);
+
+            cam = this.cameras.main;
+            this.input.on("wheel", (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
+                if (deltaY > 0) { //縮小
+                    if (cam.zoom > 1) {
+                        cam.zoom -= 1;
+                    }
+                }
+                if (deltaY < 0) { //放大
+                    cam.zoom += 1;
+                }
+            });
+
+            //書本按鈕
+            bookBtn = this.add.sprite(3650, 180, 'book').setScale(0.2);
+            bookBtn.setInteractive();
+            bookBtn
+                .on('pointerdown', () => {
+                    if (bookopen == 0) {
+                        bookopen = 1;
+                        bookBg = this.add.sprite(config.width / 2, config.height / 2, 'openbook').setScale(4.5);
+                        if (bool2[0] == 1) {
+                            over[5] = '公車';
+                        }
+                        if (bool2[1] == 1) {
+                            over[6] = '老奶奶';
+                        }
+                        if (bool2[2] == 1) {
+                            over[7] = '小狗';
+                        }
+                        if (bool2[3] == 1) {
+                            over[8] = '店員';
+                        }
+                        if (bool2[4] == 1) {
+                            over[9] = '酒精';
+                        }
+                        if (bool2[5] == 1) {
+                            over[10] = '水壺';
+                        }
+                        if (bool2[6] == 1) {
+                            over[11] = '廁所';
+                        }
+                        if (bool2[7] == 1) {
+                            over[12] = '那堤';
+                        }
+                        if (bool2[8] == 1) {
+                            over[13] = '衛生紙';
+                        }
+                        story[1] = '阿JJ搭' + over[5] + '去赴郝騰的約 ，在同一站也有位' + over[6] +
+                            '要上車，\n阿JJ好心地扶了她，到站後走去星巴巴，在路上看到路邊\n的' + over[7] +
+                            '在咬路邊妹妹的裙擺，上前援助後又繼續往前。到\n了星巴巴後阿JJ先依照' + over[8] + '指示做了' + over[9] +
+                            '和實聯制，隨後\n再到櫃檯點餐。但因為人太多了，阿JJ左顧右盼拿起櫃檯前\n面販售的' + over[10] + '看看又放了回去，點完餐後他去了' + over[11] +
+                            '，出\n來時就看到郝騰拿著他點的' + over[12] + '在角落的位置等他，許久\n未見的兩人愉快的聊著天，這時阿JJ想要拿取奶精、吸管和\n' + over[
+                                13] +
+                            '，拿取時，疫管署打給了阿JJ要叫他好好在家進行隔\n離，但其實在此之前他並未告訴郝騰他確診的事，郝騰替\n阿JJ接起電話了解這件事後，一氣之下跟阿JJ提出分手，阿JJ\n無可奈何，一個人傷心到海邊吹風散心。'
+                        storyText = this.add.text(bookBg.x - 800, bookBg.y - 520, story[1], storyFontConfig).setScale(1.2);
+                        closeBtn = this.add.sprite(bookBg.x + 650, bookBg.y + 480, 'close')
+                            .setScale(
+                                2.2);
+                        closeBtn.setInteractive();
+                    }
+                    if (bookopen == 1) {
+                        closeBtn
+                            .on('pointerdown', () => {
+                                bookopen = 0;
+                                bookBg.destroy();
+                                storyText.destroy();
+                                closeBtn.destroy();
+                                click = this.sound.add('click', {
+                                    volume: 1
+                                });
+                                click.play();
+                            });
+                    }
+
+                    openbookms = this.sound.add('openbookms', {
+                        volume: 1
+                    });
+                    openbookms.play();
+                });
+
+            //第二關提示紐
+            clerkBtn = this.add.sprite(750, 2000, 'clerkBtn');
+            clerkBtn.setInteractive();
+            clerkBtn
+                .on('pointerdown', () => {
+                    if (clerkBtnClick == 0) {
+                        tipsBg = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+                        clerkBtnClick = 1;
+                        story[0] = '店員在哪裡呢？\n好像在櫃檯忙著結帳呢';
+                        tipsText = this.add.text(tipsBg.x - 230, tipsBg.y-50, story[0], storyFontConfig);
+
+                        if (dogBtnClick == 1) {
+                            tipsBg2.setVisible(false);
+                            tipsText2.destroy();
+                        }
+
+                        if (latteBtnClick == 1) {
+                            tipsBg3.setVisible(false);
+                            tipsText3.destroy();
+                        }
+
+                        if (tissue2BtnClick == 1) {
+                            tipsBg5.setVisible(false);
+                            tipsText5.destroy();
+                        }
+
+                        if (alcoholBtnClick == 1) {
+                            tipsBg6.setVisible(false);
+                            tipsText6.destroy();
+                        }
+
+                        if (bathroomBtnClick == 1) {
+                            tipsBg7.setVisible(false);
+                            tipsText7.destroy();
+                        }
+
+                        if (bottle3BtnClick == 1) {
+                            tipsBg8.setVisible(false);
+                            tipsText8.destroy();
+                        }
+
+                        if (busBtnClick == 1) {
+                            tipsBg9.setVisible(false);
+                            tipsText9.destroy();
+                        }
+
+                        if (grandmaBtnClick == 1) {
+                            tipsBg10.setVisible(false);
+                            tipsText10.destroy();
+                        }
+
+                    } else if (clerkBtnClick == 1) {
+                        tipsBg.setVisible(false);
+                        tipsText.destroy();
+                        clerkBtnClick = 0;
+                    }
+                });
+
+            dogBtn = this.add.sprite(1050, 2000, 'dogBtn');
+            dogBtn.setInteractive();
+            dogBtn
+                .on('pointerdown', () => {
+                    if (dogBtnClick == 0) {
+                        tipsBg2 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+                        dogBtnClick = 1;
+                        story[0] = '這貌似是寵物咖啡廳呢，\n狗勾好像都聚集在一起';
+                        tipsText2 = this.add.text(tipsBg2.x - 230, tipsBg2.y-50, story[0], storyFontConfig);
+
+                        if (clerkBtnClick == 1) {
+                            tipsBg.setVisible(false);
+                            tipsText.destroy();
+                        }
+
+                        if (latteBtnClick == 1) {
+                            tipsBg3.setVisible(false);
+                            tipsText3.destroy();
+                        }
+
+                        if (tissue2BtnClick == 1) {
+                            tipsBg5.setVisible(false);
+                            tipsText5.destroy();
+                        }
+
+                        if (alcoholBtnClick == 1) {
+                            tipsBg6.setVisible(false);
+                            tipsText6.destroy();
+                        }
+
+                        if (bathroomBtnClick == 1) {
+                            tipsBg7.setVisible(false);
+                            tipsText7.destroy();
+                        }
+
+                        if (bottle3BtnClick == 1) {
+                            tipsBg8.setVisible(false);
+                            tipsText8.destroy();
+                        }
+
+                        if (busBtnClick == 1) {
+                            tipsBg9.setVisible(false);
+                            tipsText9.destroy();
+                        }
+
+                        if (grandmaBtnClick == 1) {
+                            tipsBg10.setVisible(false);
+                            tipsText10.destroy();
+                        }
+
+                    } else if (dogBtnClick == 1) {
+                        tipsBg2.setVisible(false);
+                        tipsText2.destroy();
+                        dogBtnClick = 0;
+                    }
+                });
+
+            latteBtn = this.add.sprite(1350, 2000, 'latteBtn');
+            latteBtn.setInteractive();
+            latteBtn
+                .on('pointerdown', () => {
+                    if (latteBtnClick == 0) {
+                        tipsBg3 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+                        latteBtnClick = 1;
+                        story[0] = '阿JJ喜歡田約翰的\n<靠窗座位>';
+                        tipsText3 = this.add.text(tipsBg3.x - 230, tipsBg3.y-50, story[0], storyFontConfig);
+
+                        if (clerkBtnClick == 1) {
+                            tipsBg.setVisible(false);
+                            tipsText.destroy();
+                        }
+
+                        if (dogBtnClick == 1) {
+                            tipsBg2.setVisible(false);
+                            tipsText2.destroy();
+                        }
+
+                        if (tissue2BtnClick == 1) {
+                            tipsBg5.setVisible(false);
+                            tipsText5.destroy();
+                        }
+
+                        if (alcoholBtnClick == 1) {
+                            tipsBg6.setVisible(false);
+                            tipsText6.destroy();
+                        }
+
+                        if (bathroomBtnClick == 1) {
+                            tipsBg7.setVisible(false);
+                            tipsText7.destroy();
+                        }
+
+                        if (bottle3BtnClick == 1) {
+                            tipsBg8.setVisible(false);
+                            tipsText8.destroy();
+                        }
+
+                        if (busBtnClick == 1) {
+                            tipsBg9.setVisible(false);
+                            tipsText9.destroy();
+                        }
+
+                        if (grandmaBtnClick == 1) {
+                            tipsBg10.setVisible(false);
+                            tipsText10.destroy();
+                        }
+                    } else if (latteBtnClick == 1) {
+                        tipsBg3.setVisible(false);
+                        tipsText3.destroy();
+                        latteBtnClick = 0;
+                    }
+                });
+
+            tissue2Btn = this.add.sprite(1650, 2000, 'tissue2Btn');
+            tissue2Btn.setInteractive();
+            tissue2Btn
+                .on('pointerdown', () => {
+                    if (tissue2BtnClick == 0) {
+                        tipsBg5 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+                        tissue2BtnClick = 1;
+                        story[0] = '這家咖啡廳的砂糖 吸管 \n衛生紙好像在窗邊欸';
+                        tipsText5 = this.add.text(tipsBg5.x - 230, tipsBg5.y-50, story[0], storyFontConfig);
+
+                        if (clerkBtnClick == 1) {
+                            tipsBg.setVisible(false);
+                            tipsText.destroy();
+                        }
+
+                        if (dogBtnClick == 1) {
+                            tipsBg2.setVisible(false);
+                            tipsText2.destroy();
+                        }
+
+                        if (latteBtnClick == 1) {
+                            tipsBg3.setVisible(false);
+                            tipsText3.destroy();
+                        }
+
+                        if (alcoholBtnClick == 1) {
+                            tipsBg6.setVisible(false);
+                            tipsText6.destroy();
+                        }
+
+                        if (bathroomBtnClick == 1) {
+                            tipsBg7.setVisible(false);
+                            tipsText7.destroy();
+                        }
+
+                        if (bottle3BtnClick == 1) {
+                            tipsBg8.setVisible(false);
+                            tipsText8.destroy();
+                        }
+
+                        if (busBtnClick == 1) {
+                            tipsBg9.setVisible(false);
+                            tipsText9.destroy();
+                        }
+
+                        if (grandmaBtnClick == 1) {
+                            tipsBg10.setVisible(false);
+                            tipsText10.destroy();
+                        }
+                    } else if (tissue2BtnClick == 1) {
+                        tipsBg5.setVisible(false);
+                        tipsText5.destroy();
+                        tissue2BtnClick = 0;
+                    }
+                });
+
+            alcoholBtn = this.add.sprite(1950, 2000, 'alcoholBtn');
+            alcoholBtn.setInteractive();
+            alcoholBtn
+                .on('pointerdown', () => {
+                    if (alcoholBtnClick == 0) {
+                        tipsBg6 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+                        alcoholBtnClick = 1;
+                        story[0] = '一進門就被店員\n要求酒精消毒';
+                        tipsText6 = this.add.text(tipsBg6.x - 200, tipsBg6.y-50, story[0], storyFontConfig);
+
+                        if (clerkBtnClick == 1) {
+                            tipsBg.setVisible(false);
+                            tipsText.destroy();
+                        }
+
+                        if (dogBtnClick == 1) {
+                            tipsBg2.setVisible(false);
+                            tipsText2.destroy();
+                        }
+
+                        if (latteBtnClick == 1) {
+                            tipsBg3.setVisible(false);
+                            tipsText3.destroy();
+                        }
+
+                        if (tissue2BtnClick == 1) {
+                            tipsBg5.setVisible(false);
+                            tipsText5.destroy();
+                        }
+
+                        if (bathroomBtnClick == 1) {
+                            tipsBg7.setVisible(false);
+                            tipsText7.destroy();
+                        }
+
+                        if (bottle3BtnClick == 1) {
+                            tipsBg8.setVisible(false);
+                            tipsText8.destroy();
+                        }
+
+                        if (busBtnClick == 1) {
+                            tipsBg9.setVisible(false);
+                            tipsText9.destroy();
+                        }
+
+                        if (grandmaBtnClick == 1) {
+                            tipsBg10.setVisible(false);
+                            tipsText10.destroy();
+                        }
+
+                    } else if (alcoholBtnClick == 1) {
+                        tipsBg6.setVisible(false);
+                        tipsText6.destroy();
+                        alcoholBtnClick = 0;
+                    }
+                });
+
+            bathroomBtn = this.add.sprite(2250, 2000, 'bathroomBtn');
+            bathroomBtn.setInteractive();
+            bathroomBtn
+                .on('pointerdown', () => {
+                    if (bathroomBtnClick == 0) {
+                        tipsBg7 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+                        bathroomBtnClick = 1;
+                        story[0] = '右邊數來第三間？';
+                        tipsText7 = this.add.text(tipsBg7.x - 235, tipsBg7.y, story[0], storyFontConfig);
+
+                        if (clerkBtnClick == 1) {
+                            tipsBg.setVisible(false);
+                            tipsText.destroy();
+                        }
+
+                        if (dogBtnClick == 1) {
+                            tipsBg2.setVisible(false);
+                            tipsText2.destroy();
+                        }
+
+                        if (latteBtnClick == 1) {
+                            tipsBg3.setVisible(false);
+                            tipsText3.destroy();
+                        }
+
+                        if (tissue2BtnClick == 1) {
+                            tipsBg5.setVisible(false);
+                            tipsText5.destroy();
+                        }
+
+                        if (alcoholBtnClick == 1) {
+                            tipsBg6.setVisible(false);
+                            tipsText6.destroy();
+                        }
+
+                        if (bottle3BtnClick == 1) {
+                            tipsBg8.setVisible(false);
+                            tipsText8.destroy();
+                        }
+
+                        if (busBtnClick == 1) {
+                            tipsBg9.setVisible(false);
+                            tipsText9.destroy();
+                        }
+
+                        if (grandmaBtnClick == 1) {
+                            tipsBg10.setVisible(false);
+                            tipsText10.destroy();
+                        }
+
+                    } else if (bathroomBtnClick == 1) {
+                        tipsBg7.setVisible(false);
+                        tipsText7.destroy();
+                        bathroomBtnClick = 0;
+                    }
+                });
+
+            bottle3Btn = this.add.sprite(2550, 2000, 'bottle3Btn');
+            bottle3Btn.setInteractive();
+            bottle3Btn
+                .on('pointerdown', () => {
+                    if (bottle3BtnClick == 0) {
+                        tipsBg8 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+                        bottle3BtnClick = 1;
+                        story[0] = '排隊結帳的過程可以\n順便看看這家咖啡廳\n的水壺呢';
+                        tipsText8 = this.add.text(tipsBg8.x - 220, tipsBg8.y-50, story[0], storyFontConfig);
+
+                        if (clerkBtnClick == 1) {
+                            tipsBg.setVisible(false);
+                            tipsText.destroy();
+                        }
+
+                        if (dogBtnClick == 1) {
+                            tipsBg2.setVisible(false);
+                            tipsText2.destroy();
+                        }
+
+                        if (latteBtnClick == 1) {
+                            tipsBg3.setVisible(false);
+                            tipsText3.destroy();
+                        }
+
+                        if (tissue2BtnClick == 1) {
+                            tipsBg5.setVisible(false);
+                            tipsText5.destroy();
+                        }
+
+                        if (alcoholBtnClick == 1) {
+                            tipsBg6.setVisible(false);
+                            tipsText6.destroy();
+                        }
+
+                        if (bathroomBtnClick == 1) {
+                            tipsBg7.setVisible(false);
+                            tipsText7.destroy();
+                        }
+
+                        if (busBtnClick == 1) {
+                            tipsBg9.setVisible(false);
+                            tipsText9.destroy();
+                        }
+
+                        if (grandmaBtnClick == 1) {
+                            tipsBg10.setVisible(false);
+                            tipsText10.destroy();
+                        }
+
+                    } else if (bottle3BtnClick == 1) {
+                        tipsBg8.setVisible(false);
+                        tipsText8.destroy();
+                        bottle3BtnClick = 0;
+                    }
+                });
+
+            busBtn = this.add.sprite(2850, 2000, 'busBtn');
+            busBtn.setInteractive();
+            busBtn
+                .on('pointerdown', () => {
+                    if (busBtnClick == 0) {
+                        tipsBg9 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+                        busBtnClick = 1;
+                        story[0] = '馬路旁的公車站牌可以\n幫助人們了解公車路線呢';
+                        tipsText9 = this.add.text(tipsBg9.x - 235, tipsBg9.y-50, story[0], storyFontConfig);
+
+                        if (clerkBtnClick == 1) {
+                            tipsBg.setVisible(false);
+                            tipsText.destroy();
+                        }
+
+                        if (dogBtnClick == 1) {
+                            tipsBg2.setVisible(false);
+                            tipsText2.destroy();
+                        }
+
+                        if (latteBtnClick == 1) {
+                            tipsBg3.setVisible(false);
+                            tipsText3.destroy();
+                        }
+
+                        if (tissue2BtnClick == 1) {
+                            tipsBg5.setVisible(false);
+                            tipsText5.destroy();
+                        }
+
+                        if (alcoholBtnClick == 1) {
+                            tipsBg6.setVisible(false);
+                            tipsText6.destroy();
+                        }
+
+                        if (bathroomBtnClick == 1) {
+                            tipsBg7.setVisible(false);
+                            tipsText7.destroy();
+                        }
+
+                        if (bottle3BtnClick == 1) {
+                            tipsBg8.setVisible(false);
+                            tipsText8.destroy();
+                        }
+
+                        if (grandmaBtnClick == 1) {
+                            tipsBg10.setVisible(false);
+                            tipsText10.destroy();
+                        }
+
+                    } else if (busBtnClick == 1) {
+                        tipsBg9.setVisible(false);
+                        tipsText9.destroy();
+                        busBtnClick = 0;
+                    }
+                });
+
+            grandmaBtn = this.add.sprite(3150, 2000, 'grandmaBtn');
+            grandmaBtn.setInteractive();
+            grandmaBtn
+                .on('pointerdown', () => {
+                    if (grandmaBtnClick == 0) {
+                        tipsBg10 = this.add.sprite(config.width / 2, config.height / 2, 'tips');
+                        grandmaBtnClick = 1;
+                        story[0] = '看著窗邊拿著氣球的女孩，\n老奶奶想起自己年輕的時候';
+                        tipsText10 = this.add.text(tipsBg10.x - 235, tipsBg10.y-50, story[0], storyFontConfig);
+
+                        if (clerkBtnClick == 1) {
+                            tipsBg.setVisible(false);
+                            tipsText.destroy();
+                        }
+
+                        if (dogBtnClick == 1) {
+                            tipsBg2.setVisible(false);
+                            tipsText2.destroy();
+                        }
+
+                        if (latteBtnClick == 1) {
+                            tipsBg3.setVisible(false);
+                            tipsText3.destroy();
+                        }
+
+                        if (tissue2BtnClick == 1) {
+                            tipsBg5.setVisible(false);
+                            tipsText5.destroy();
+                        }
+
+                        if (alcoholBtnClick == 1) {
+                            tipsBg6.setVisible(false);
+                            tipsText6.destroy();
+                        }
+
+                        if (bathroomBtnClick == 1) {
+                            tipsBg7.setVisible(false);
+                            tipsText7.destroy();
+                        }
+
+                        if (bottle3BtnClick == 1) {
+                            tipsBg8.setVisible(false);
+                            tipsText8.destroy();
+                        }
+
+                        if (busBtnClick == 1) {
+                            tipsBg9.setVisible(false);
+                            tipsText9.destroy();
+                        }
+
+                    } else if (grandmaBtnClick == 1) {
+                        tipsBg10.setVisible(false);
+                        tipsText10.destroy();
+                        grandmaBtnClick = 0;
+                    }
+                });
+
+                NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setVisible(false);
+            bgMusic2 = this.sound.add('bgMusic2', {
+                volume: 1,
+                loop: true
+            });
+            bgMusic2.play();
+
+            //物件 
+            //酒精噴
+            alcoholblack.setInteractive();
+            alcoholblack.on('pointerdown', () => {
+                //書本bool 
+                bool2[4] == 1;
+                over[9] = '酒精';
+                a = 1;
+                if (a == 1 && b == 1 && c == 1 && d == 1 && e == 1 && f == 1 && g == 1 && h == 1 && i == 1) {
+                    footer2.visible = true;
+                    NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+                    NLbtn.setInteractive();
+                }
+
+                NLbtn
+                    .on('pointerdown', () => {
+                        window.location='./Scene3.html';
+                    })
+
+                alcoholblack.destroy();
+                alcohol = this.add.sprite(1327, 255, 'alcohol').setScale(0.07);
+
+                this.anims.create({
+
+                    key: 'alcohol',
+                    frames: this.anims.generateFrameNumbers('alcohol', {
+                        start: 0,
+                        end: 2
+                    }),
+                    frameRate: 1.2,
+                    repeat: -1
+                });
+                alcohol.anims.play('alcohol', true);
+            });
+
+            //馬桶
+            bathroomblack.setInteractive();
+            bathroomblack.on('pointerdown', () => {
+
+                //書本bool 
+                bool2[6] == 1;
+                over[11] = '廁所';
+                b = 1;
+                if (a == 1 && b == 1 && c == 1 && d == 1 && e == 1 && f == 1 && g == 1 && h == 1 && i == 1) {
+                    footer2.visible = true;
+                    NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+                    NLbtn.setInteractive();
+                }
+
+                NLbtn
+                    .on('pointerdown', () => {
+                        window.location='./Scene3.html';
+                    })
+
+                bathroomblack.destroy();
+                bathroomcolor = this.add.sprite(3080, 343, 'bathroomcolor').setScale(0.43);
+            });
+
+            //水壺
+            bottle5black.setInteractive();
+            bottle5black.on('pointerdown', () => {
+
+                //書本bool 
+                bool2[5] == 1;
+                over[10] = '水壺';
+                c = 1;
+                if (a == 1 && b == 1 && c == 1 && d == 1 && e == 1 && f == 1 && g == 1 && h == 1 && i == 1) {
+                    footer2.visible = true;
+                    NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+                    NLbtn.setInteractive();
+                }
+
+                NLbtn
+                    .on('pointerdown', () => {
+                        window.location='./Scene3.html';
+                    })
+
+                bottle5black.destroy();
+                bottle5 = this.add.sprite(2100, 350, 'bottle5black').setScale(0.08);
+
+                this.anims.create({
+
+                    key: 'bottle5',
+                    frames: this.anims.generateFrameNumbers('bottle5', {
+                        start: 0,
+                        end: 2
+                    }),
+                    frameRate: 1.2,
+                    repeat: -1
+                });
+                bottle5.anims.play('bottle5', true);
+
+            });
+
+
+            //站牌
+            busstopblack.setInteractive();
+            busstopblack.on('pointerdown', () => {
+
+                //書本bool 
+                bool2[0] == 1;
+                over[5] = '公車';
+                d = 1;
+                if (a == 1 && b == 1 && c == 1 && d == 1 && e == 1 && f == 1 && g == 1 && h == 1 && i == 1) {
+                    footer2.visible = true;
+                    NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+                    NLbtn.setInteractive();
+                }
+
+                NLbtn
+                    .on('pointerdown', () => {
+                        window.location='./Scene3.html';
+                    })
+
+                busstopblack.destroy();
+                busstop = this.add.sprite(465, 380, 'busstop').setScale(0.3);
+
+                this.anims.create({
+
+                    key: 'busstop',
+                    frames: this.anims.generateFrameNumbers('busstop', {
+                        start: 0,
+                        end: 2
+                    }),
+                    frameRate: 1.2,
+                    repeat: -1
+                });
+                busstop.anims.play('busstop', true);
+            });
+
+            //拿鐵
+            latteblack.setInteractive();
+            latteblack.on('pointerdown', () => {
+
+                //書本bool 
+                bool2[7] == 1;
+                over[12] = '那堤';
+                e = 1;
+                if (a == 1 && b == 1 && c == 1 && d == 1 && e == 1 && f == 1 && g == 1 && h == 1 && i == 1) {
+                    footer2.visible = true;
+                    NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+                    NLbtn.setInteractive();
+                }
+
+                NLbtn
+                    .on('pointerdown', () => {
+                        window.location='./Scene3.html';
+                    })
+
+                latteblack.destroy();
+                lattecolor = this.add.sprite(2400, 1447, 'lattecolor').setScale(0.15);
+            });
+
+            //衛生紙
+            tissueblack.setInteractive();
+            tissueblack.on('pointerdown', () => {
+
+                //書本bool 
+                bool2[8] == 1;
+                over[13] = '衛生紙';
+                f = 1;
+                if (a == 1 && b == 1 && c == 1 && d == 1 && e == 1 && f == 1 && g == 1 && h == 1 && i == 1) {
+                    footer2.visible = true;
+                    NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+                    NLbtn.setInteractive();
+                }
+
+                NLbtn
+                    .on('pointerdown', () => {
+                        window.location='./Scene3.html';
+                    })
+
+                tissueblack.destroy();
+                tissuecolor = this.add.sprite(2400, 143, 'tissuecolor').setScale(0.1);
+
+                this.anims.create({
+
+                    key: 'tissuecolor',
+                    frames: this.anims.generateFrameNumbers('tissuecolor', {
+                        start: 0,
+                        end: 2
+                    }),
+                    frameRate: 1.2,
+                    repeat: -1
+                });
+                tissuecolor.anims.play('tissuecolor', true);
+            });
+
+            //店員
+            clerkBlack1.setInteractive();
+            clerkBlack1.on('pointerdown', () => {
+
+                //書本bool
+                bool2[3] == 1;
+                over[8] = '店員';
+                g = 1;
+                if (a == 1 && b == 1 && c == 1 && d == 1 && e == 1 && f == 1 && g == 1 && h == 1 && i == 1) {
+                    footer2.visible = true;
+                    NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+                    NLbtn.setInteractive();
+                }
+
+                NLbtn
+                    .on('pointerdown', () => {
+                        window.location='./Scene3.html';
+                    })
+
+                clerkBlack1.destroy();
+                clerk = this.add.sprite(1005, 240, 'clerk').setScale(0.1);
+
+                this.anims.create({
+
+                    key: 'clerk',
+                    frames: this.anims.generateFrameNumbers('clerk', {
+                        start: 0,
+                        end: 2
+                    }),
+                    frameRate: 1.2,
+                    repeat: -1
+                });
+                clerk.anims.play('clerk', true);
+            });
+
+            //狗勾
+            dogBlack3.setInteractive();
+            dogBlack3.on('pointerdown', () => {
+
+                //書本bool 
+                bool2[2] == 1;
+                over[7] = '小狗';
+                h = 1;
+                if (a == 1 && b == 1 && c == 1 && d == 1 && e == 1 && f == 1 && g == 1 && h == 1 && i == 1) {
+                    footer2.visible = true;
+                    NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+                    NLbtn.setInteractive();
+                }
+
+                NLbtn
+                    .on('pointerdown', () => {
+                        window.location='./Scene3.html';
+                    })
+
+                dogBlack3.destroy();
+                dog = this.add.sprite(3450, 960, 'dog').setScale(0.23);
+
+                this.anims.create({
+
+                    key: 'dog',
+                    frames: this.anims.generateFrameNumbers('dog', {
+                        start: 0,
+                        end: 2
+                    }),
+                    frameRate: 1.2,
+                    repeat: -1
+                });
+                dog.anims.play('dog', true);
+            });
+
+            //奶奶
+            grandmaBlack1.setInteractive();
+            grandmaBlack1.on('pointerdown', () => {
+
+                //書本bool 
+                bool2[1] == 1;
+                over[6] = '老奶奶';
+                i = 1;
+                if (a == 1 && b == 1 && c == 1 && d == 1 && e == 1 && f == 1 && g == 1 && h == 1 && i == 1) {
+                    footer2.visible = true;
+                    NLbtn = this.add.image(config.width / 2, config.height / 2, 'NLbtn').setScale(2);
+                    NLbtn.setInteractive();
+                }
+
+                NLbtn
+                    .on('pointerdown', () => {
+                        window.location='./Scene3.html';
+                    })
+
+                grandmaBlack1.destroy();
+                grandma = this.add.sprite(2250, 1700, 'grandma').setScale(0.15);
+
+                this.anims.create({
+
+                    key: 'grandma',
+                    frames: this.anims.generateFrameNumbers('grandma', {
+                        start: 0,
+                        end: 1
+                    }),
+                    frameRate: 1.0,
+                    repeat: -1
+                });
+                grandma.anims.play('grandma', true);
+            });
+        }
+
+        function scene2_update() {
+            //按下鍵盤上下左右移動
+            if (this.cursors.left.isDown) {
+                this.cameras.main.scrollX -= 10;
+            } else if (this.cursors.right.isDown) {
+                this.cameras.main.scrollX += 10;
+            }
+            if (this.cursors.up.isDown) {
+                this.cameras.main.scrollY -= 10;
+            } else if (this.cursors.down.isDown) {
+                this.cameras.main.scrollY += 10;
+            }
+        }
+    </script>
+</body>
+
+</html>

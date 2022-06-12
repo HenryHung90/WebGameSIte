@@ -16,9 +16,11 @@
     font-family: 'pixel font';
 }
 .ScoringTitle{
+    opacity: 0;
     font-size:150px;
 }
 .ScoringSubtitle{
+    opacity: 0;
     font-size:100px;
 }
 .ScoringTableBox{

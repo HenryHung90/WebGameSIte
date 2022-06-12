@@ -37,7 +37,7 @@
     display: flex;
     width: 100%;
     height:100%;
-    background-image: url('../image/G01.jpeg');
+    background-size: cover;
 }
 #GroupHome_PlayButton{
     font-family: "pixel font";
@@ -86,7 +86,6 @@
     left: 55%;
     width: 420px;
     height:594px;
-    background-image: url('../image/G02.jpeg');
     background-size: cover;
 }
 
@@ -189,7 +188,7 @@
 }
 .GameElement_td{
     padding: 10px;
-    border: 2px dashed whitesmoke;
+    border: 1px dashed whitesmoke;
 }
 .GroupHome_GroupDivision{
     padding-bottom: 50px;

@@ -1,101 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sonĝolando</title>
-    <script src="asset/js/phaser.min.js"></script>
-    <script src="asset/js/phaser.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Go Back</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
-        body {
-            margin: 0;
+      * {
+        margin: 0;
+      }
+
+      .maki-rotate {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 240px;
+        height: 320px;
+        margin: -60px 0 0 -60px;
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+          width: 240px;
+          height: 320px;
         }
+        to {
+          width: 0px;
+          height: 0px;
+          transform: rotate(359deg);
+        }
+      }
+
+      div.maki-forward {
+        z-index: 2;
+        bottom: 0;
+        position: absolute;
+        width: 160px;
+        height: 200px;
+        background-image: url("/assets/sprites/Makis-2-forward.png");
+      }
+
+      button {
+        margin-top: 200px;
+      }
+
+      .facing-left {
+        transform: scaleX(-1);
+      }
+      .background-scene-1 {
+        width: 100vw;
+        height: 100vh;
+        background-image: url(/assets/sprites/start.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .scene-2 {
+        max-width: 100%;
+        max-height: 100%;
+      }
+      .button-start {
+        cursor: pointer;
+        width: 500px;
+        height: 120px;
+        top: 30%;
+        left: 42%;
+        position: absolute;
+        background-image: url(/assets/sprites/startbutton.png);
+        background-repeat: no-repeat;
+        scale: 0.2;
+      }
+
+      .go-back {
+        background-position: center;
+        width: 500px;
+        height: 120px;
+        top: 10%;
+        left: 35%;
+        position: absolute;
+        background-image: url(/assets/sprites/goback-06.png);
+        background-repeat: no-repeat;
+        scale: 0.2;
+      }
+      .scene-2 {
+        display: none;
+      }
+      .background-scene-2 {
+        width: 100vw;
+        height: 100vh;
+        background-image: url(/assets/sprites/nightmarket.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .dialog-2 {
+        display: none;
+        cursor: pointer;
+        width: 334px;
+        height: 230px;
+        top: 30%;
+        left: 39.3%;
+        position: absolute;
+        background-image: url(/assets/sprites/dialog2-01.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .strange-world {
+        width: 100vw;
+        height: 100vh;
+        background-image: url(/assets/sprites/strangeworld.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: absolute;
+        top:0;
+        left: 0;
+        display:none;
+      }
+      .audio {
+        display: none;
+      }
     </style>
-</head>
-<body>
-    <script>
-        const config =
-        {
-            type: Phaser.AUTO,
-            width: 1920,
-            height: 1080,
-            physics: {
-                default: 'arcade',
-                arcade: {
-                    gravity: { y: 300},
-                    debug: false
-                }
-            },
-            scene:
-            {
-                preload: preload,
-                create: create,
-                update: update,
-            },
-            scale:
-            {
-                mode: Phaser.Scale.FIT,
-                autoCenter: Phaser.Scale.CENTER_BOTH
-            }
-        };
-    const game = new Phaser.Game(config);
+  </head>
 
-    function preload() {
-        this.load.video('page1', 'asset/home/page1.mp4', 'loadeddata', false, true);
-        this.load.video('story', 'asset/home/story.mp4', 'loadeddata', false, false);
-        this.load.image('start','asset/home/start.png');
-        this.load.image('logo','asset/home/logo.png');
-        this.load.image('skip','asset/home/skip.png');
+  <body>
+    <div class="scene-1">
+      <div class="background-scene-1"></div>
+      <div class="go-back"></div>
+      <div class="button-start"></div>
+    </div>
+    <div class="scene-2">
+      <div class="background-scene-2"></div>
+      <div class="dialog-2"></div>
+    </div>
+    <div class="maki-forward"></div>
+    <div class="strange-world"></div>
+    <img
+      class="maki-rotate"
+      src="./assets/sprites/Maki.png"
+      alt=""
+      width="240"
+      height="360"
+    />
+
+    <audio autoplay loop class="audio">
+      <source src="./assets/audio/start-screen-1.mp3" type="audio/mp3" />
+    </audio>
+  </body>
+  <script>
+    var walkingDirection = "right";
+    var stepNum = 3;
+    var stepTimeout;
+    var makiFoward = $(".maki-forward");
+    var divPosition = 0;
+    var direction = 25;
+    var speed = 5;
+    var slider = document.getElementById("slider");
+    var startBtn = $(".button-start");
+    var countTime = 5000;
+    var audio = $(".audio");
+    function hideScene1() {
+      $(".button-start").hide();
+      $(".scene-1").hide();
+    }
+    function hideScene2() {
+      $(".scene-2").hide();
+      $(".dialog-2").hide();
+      makiFoward.hide();
+    }
+    function showScene2() {
+      $(".scene-2").show();
+      $(".dialog-2").fadeIn(1500);
+      audio.prop("src", "./assets/audio/start-screen-2.mp3");
+      divPosition = 0;
+    }
+    function intoStrangeWorld() {
+      hideScene2();
+      $(".strange-world").show();
+      $(".maki-rotate").show();
+      $(".maki-rotate").css("-webkit-animation", "rotate 4s linear forwards");
+      $(".maki-rotate").css("-moz-animation", "rotate 4s linear forwards");
+      $(".maki-rotate").css("animation", "rotate 4s linear forwards");
+      audio.prop("src", "./assets/audio/go-inside.mp3");
+      setTimeout(function () {
+        location.href = location.origin + "/levelone.html";
+      }, 4000);
     }
 
-    var video;
-    var storyvideo;
-    var button;
-    var buttonskip;
-
-    function create() {
-        var video = this.add.video(960, 540, 'page1');
-        video.play();
-        platform = this.physics.add.staticGroup();
-        platform.create(960, 300, 'logo');
-
-        button = this.add.sprite(config.width/2, config.height-180, 'start').setInteractive()
-        .on('pointerover', () => {
-            button.setScale(1.2);
-        })
-        .on('pointerout', () => {
-            button.setScale(1);
-        })
-        .on('pointerdown', () => {
-            var storyvideo = this.add.video(960, 540, 'story');
-            var volume = storyvideo.getVolume();
-            storyvideo.setVolume(0.5);
-            storyvideo.play()
-            .on('complete', () => {
-                window.location = "./level_1.html"
-                storyvideo.destroy();
-            });
-                
-            buttonskip = this.add.sprite(config.width-180, 80, 'skip').setInteractive()
-            .on('pointerover', () => {
-                buttonskip.setScale(1.2);
-            })
-            .on('pointerout', () => {
-                buttonskip.setScale(1);
-            })
-            .on('pointerdown', () => {
-                window.location = "./level_1.html"
-            });
-        })
-    }
-
-    function update(){
-
-    }
-    </script>
-</head>
-<body>
-    
-</body>
+    $(document).ready(function () {
+      startBtn.click(function () {
+        hideScene1();
+        showScene2();
+        setTimeout(function () {
+          intoStrangeWorld();
+        }, countTime);
+      });
+      step();
+      function step() {
+        if (
+          walkingDirection == "right" &&
+          makiFoward.position().left + 160 > innerWidth
+        ) {
+          makiFoward.addClass("facing-left");
+          direction = -25;
+          walkingDirection = "left";
+        }
+        if (walkingDirection == "left" && makiFoward.position().left == 0) {
+          makiFoward.removeClass("facing-left");
+          direction = 25;
+          walkingDirection = "right";
+        }
+        makiFoward.css("background-position", -160 * stepNum + "px");
+        speed = 2;
+        divPosition = divPosition + direction * speed;
+        makiFoward.css("left", divPosition + "px");
+        stepNum = (stepNum + 1) % 5;
+        stepTimeout = setTimeout(step, 750 / speed);
+      }
+    });
+  </script>
 </html>

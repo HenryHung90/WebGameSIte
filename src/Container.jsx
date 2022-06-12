@@ -75,7 +75,7 @@ const Container = () =>{
         return(
             <Router>
                 <Routes>
-                    <Route path='/' element={<Login setIsUser={()=>{setIsUser(true)}}/>}/>
+                    <Route path='/' element={<Login setIsUser={()=>{setIsUser(true)}} setUser={setUser}/>}/>
                     <Route path='*' element={<Error/>}/>
                 </Routes>
             </Router>

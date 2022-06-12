@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Go Back - Level one</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      * {
+        margin: 0px;
+        overflow: hidden;
+      }
+      .audio {
+        display: none;
+      }
+      .pyro {
+        display: none;
+      }
+      .dialog-3 {
+        display: none;
+      }
+      .dialog-3 > img {
+        width: 600px;
+        height: 400px;
+        position: absolute;
+        left: 33%;
+      }
+    </style>
+  </head>
+  <audio controls autoplay class="audio">
+    <source src="./assets/audio/start-level-1.mp3" type="audio/mp3" />
+  </audio>
+  <audio controls autoplay loop class="audio">
+    <source src="./assets/audio/background-music.mp3" type="audio/mp3" />
+  </audio>
+  <audio controls class="audio run-audio">
+    <source src="./assets/audio/run.mp3" type="audio/mp3" />
+  </audio>
+  <audio controls class="audio jump-audio">
+    <source src="./assets/audio/jump.mp3" type="audio/mp3" />
+  </audio>
+  <audio controls class="audio hit-audio">
+    <source src="./assets/audio/get-hit.mp3" type="audio/mp3" />
+  </audio>
+  <audio controls class="audio key-audio">
+    <source src="./assets/audio/get-key.mp3" type="audio/mp3" />
+  </audio>
+  <body>
+    <div class="pyro">
+      <div class="before"></div>
+      <div class="after"></div>
+    </div>
+    <div class="dialog-3">
+      <img src="./assets/sprites/dialog3-07.png" />
+    </div>
+    <canvas class="board"></canvas>
+    <script src="preload.js" defer></script>
+    <script src="./assets/map/coordinates.js" defer></script>
+    <script src="input.js" defer></script>
+    <script src="entitityParent.js" defer></script>
+    <script src="bgblueprint.js" defer></script>
+    <script src="./entity/maki.js" defer></script>
+    <script src="./entity/mold.js" defer></script>
+    <script src="levelBuilder.js" defer></script>
+    <script src="physics.js" defer></script>
+    <script src="animation.js" defer></script>
+    <script src="movement.js"></script>
+    <script src="game.js" defer></script>
+  </body>
+</html>
