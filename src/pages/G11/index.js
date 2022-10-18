@@ -2,7 +2,9 @@ import "../components/css/GroupHome.css";
 import "./index.css";
 import Button from "@mui/material/Button";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 
+import GameDesignPath from "./components/GameDesignPath";
 import GameIntro from "./components/GameIntro";
 import GameContent from "./components/GameContent";
 import GameDesign from "./components/GameDesign";
@@ -79,6 +81,14 @@ const GroupElevenHome = ({ User }) => {
             <h3 className="GroupHome_GroupMember">
               方國軒、李如喬、蕭鈺騰、李曉柔、高琮凱
             </h3>
+            <Button
+              id="GroupHome_PlayButton"
+              href="https://youtu.be/TwXgtwoY1Vc"
+              variant="contained"
+              startIcon={<YouTubeIcon />}
+            >
+              介紹影片
+            </Button>
 
             <Button
               id="GroupHome_PlayButton"
@@ -97,6 +107,7 @@ const GroupElevenHome = ({ User }) => {
       </div>
       <div className="GroupHome_Container">
         <GameBarElement />
+        <GameDesignPath />
         <GameIntro />
         <GameContent />
         <GameStructure />

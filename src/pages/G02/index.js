@@ -2,7 +2,9 @@ import "../components/css/GroupHome.css";
 import "./index.css";
 import Button from "@mui/material/Button";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 
+import GameDesignPath from "./components/GameDesignPath";
 import GameIntro from "./components/GameIntro";
 import GameContent from "./components/GameContent";
 import GameDesign from "./components/GameDesign";
@@ -39,7 +41,7 @@ const GroupTwoHome = ({ User }) => {
     $(".GameContainer").fadeIn(500);
     $("html, body").animate({ scrollTop: 0 }, 100);
     $("#HomeMenu").animate({ opacity: 0, zIndex: -1000 }, 100);
-    $("#Iframe").attr("src", "./Project/G02/levelone.html");
+    $("#Iframe").attr("src", "./Project/G02/index.html");
     $("body").css({ overflow: "hidden" });
   };
   const OutGame = (e) => {
@@ -79,7 +81,14 @@ const GroupTwoHome = ({ User }) => {
             <h3 className="GroupHome_GroupMember">
               陳子晴、簡紫晴、李佳欣、阮氏玉紅
             </h3>
-
+            <Button
+              id="GroupHome_PlayButton"
+              href="https://youtu.be/nhTP41uPgrc"
+              variant="contained"
+              startIcon={<YouTubeIcon />}
+            >
+              介紹影片
+            </Button>
             <Button
               id="GroupHome_PlayButton"
               onClick={PlayGame}
@@ -97,6 +106,7 @@ const GroupTwoHome = ({ User }) => {
       </div>
       <div className="GroupHome_Container">
         <GameBarElement />
+        <GameDesignPath />
         <GameIntro />
         <GameContent />
         <GameStructure />

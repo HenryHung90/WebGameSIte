@@ -2,7 +2,9 @@ import "../components/css/GroupHome.css";
 import "./index.css";
 import Button from "@mui/material/Button";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 
+import GameDesignPath from "./components/GameDesignPath";
 import GameIntro from "./components/GameIntro";
 import GameContent from "./components/GameContent";
 import GameDesign from "./components/GameDesign";
@@ -79,7 +81,14 @@ const GroupFiveHome = ({ User }) => {
             <h3 className="GroupHome_GroupMember">
               詹侑庭、趙蔆瑄、高詠涵、黃巧鈴
             </h3>
-
+            <Button
+              id="GroupHome_PlayButton"
+              href="https://youtu.be/UEVbmAIfxJc"
+              variant="contained"
+              startIcon={<YouTubeIcon />}
+            >
+              介紹影片
+            </Button>
             <Button
               id="GroupHome_PlayButton"
               onClick={PlayGame}
@@ -97,6 +106,7 @@ const GroupFiveHome = ({ User }) => {
       </div>
       <div className="GroupHome_Container">
         <GameBarElement />
+        <GameDesignPath />
         <GameIntro />
         <GameContent />
         <GameStructure />

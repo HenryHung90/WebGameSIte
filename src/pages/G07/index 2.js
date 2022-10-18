@@ -18,7 +18,7 @@ import GameBarElement from "../components/html/GameBarElement";
 import $ from "jquery";
 import { useEffect, useState } from "react";
 
-const GroupSixHome = ({ User }) => {
+const GroupFiveHome = ({ User }) => {
   const [Scroll, setScroll] = useState("");
   useEffect(() => {
     $("html, body").animate({ scrollTop: 0 }, 300);
@@ -41,7 +41,7 @@ const GroupSixHome = ({ User }) => {
     $(".GameContainer").fadeIn(500);
     $("html, body").animate({ scrollTop: 0 }, 100);
     $("#HomeMenu").animate({ opacity: 0, zIndex: -1000 }, 100);
-    $("#Iframe").attr("src", "./Project/G06/index.html");
+    $("#Iframe").attr("src", "./Project/G07/index.html");
     $("body").css({ overflow: "hidden" });
   };
   const OutGame = (e) => {
@@ -72,16 +72,18 @@ const GroupSixHome = ({ User }) => {
         </Button>
         <div className="Gaming" dangerouslySetInnerHTML={iframe()} />
       </div>
-      <div className="GroupHome" id="GroupHome_G06">
+      <div className="GroupHome" id="GroupHome_G07">
         <div className="GroupHome_Main">
           <div className="GroupHome_MainText">
             <div className="GroupHome_Cover" />
-            <h1 className="GroupHome_GroupNumber">Group.06</h1>
-            <h1 className="GroupHome_GroupName">StrawFall</h1>
-            <h3 className="GroupHome_GroupMember">林天牧、宋顥歆</h3>
+            <h1 className="GroupHome_GroupNumber">Group.07</h1>
+            <h1 className="GroupHome_GroupName">MELTING ICE</h1>
+            <h3 className="GroupHome_GroupMember">
+              周庭豪、劉肇紘、陳聖勳、張翔喻、林俊廷、姜少捷
+            </h3>
             <Button
               id="GroupHome_PlayButton"
-              href="https://youtu.be/kAWYjdgR6-c"
+              href="https://youtu.be/Uii03UI8yzk"
               variant="contained"
               startIcon={<YouTubeIcon />}
             >
@@ -96,7 +98,7 @@ const GroupSixHome = ({ User }) => {
               遊戲試玩
             </Button>
           </div>
-          <div className="GroupHome_Image" id="GroupHomeImage_G06"></div>
+          <div className="GroupHome_Image" id="GroupHomeImage_G07"></div>
         </div>
         <h3 className="GroupHome_GoIntro" onClick={GoIntro}>
           下滑看介紹
@@ -117,4 +119,4 @@ const GroupSixHome = ({ User }) => {
   );
 };
 
-export default GroupSixHome;
+export default GroupFiveHome;
